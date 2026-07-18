@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos para scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+/* Estilos para inputs y botones con diseño minimalista */
+.input-minimal {
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  transition: all 0.2s ease;
+}
+
+.input-minimal:focus {
+  outline: none;
+  box-shadow: 4px 4px 0px 0px #000000;
+  transform: translate(-2px, -2px);
+}
+
+.button-minimal {
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.button-minimal:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #666666;
+}
+
+.button-minimal:active {
+  transform: translate(0px, 0px);
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+/* Estilos para cards con sombra característica */
+.card-minimal {
+  border: 2px solid #000000;
+  background: #ffffff;
+  box-shadow: 8px 8px 0px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.card-minimal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0px 0px #000000;
+}
+
+/* Estilos para estados de pago */
+.status-paid {
+  background: #22c55e;
+  color: white;
+}
+
+.status-expired {
+  background: #ef4444;
+  color: white;
+}
+
+.status-single {
+  background: #eab308;
+  color: white;
+}
+
+/* Estilos para alertas */
+.alert-danger {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.alert-success {
+  border-left: 4px solid #22c55e;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.alert-warning {
+  border-left: 4px solid #eab308;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card-minimal {
+    box-shadow: 4px 4px 0px 0px #000000;
+  }
+  
+  .card-minimal:hover {
+    transform: none;
+    box-shadow: 4px 4px 0px 0px #000000;
+  }
+}
