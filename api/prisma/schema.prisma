@@ -1,0 +1,283 @@
+// Prisma 7 schema (URL movida a prisma.config.ts)
+// Docs: https://pris.ly/d/config-datasource
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ============================================================
+// Auth / Usuarios (rol-based)
+// ============================================================
+
+enum Role {
+  ADMIN
+  TRAINER
+  MEMBER
+}
+
+model Profile {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  whatsapp     String?
+  birthDate    DateTime? @map("birth_date")
+  role         Role     @default(MEMBER)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  member       Member?
+  trainer      Trainer?
+
+  @@map("profiles")
+}
+
+// ============================================================
+// Miembros (alumnos del gimnasio)
+// ============================================================
+
+enum MemberStatus {
+  PAID
+  SINGLE_CLASS
+  EXPIRED
+  PENDING
+}
+
+model Member {
+  id               String      @id @default(uuid())
+  profileId        String      @unique
+  profile          Profile     @relation(fields: [profileId], references: [id])
+  memberCode       String      @unique @db.VarChar(8)
+  expiryDate       DateTime?   @map("expiry_date")
+  status           String      @default("expired")
+  lastPaymentDate  DateTime?   @map("last_payment_date")
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  payments          Payment[]
+  attendances       Attendance[]
+  failedAttempts    FailedAccessAttempt[]
+  classBookings     ClassBooking[]
+  routineAssignments RoutineAssignment[]
+  workoutLogs       WorkoutLog[]
+
+  @@index([status])
+  @@map("members")
+}
+
+// ============================================================
+// Entrenadores (Trainers)
+// ============================================================
+
+model Trainer {
+  id          String    @id @default(uuid())
+  profileId   String    @unique
+  profile     Profile   @relation(fields: [profileId], references: [id])
+  specialty   String?
+  bio         String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  routines    Routine[]
+  assignments RoutineAssignment[]
+
+  @@map("trainers")
+}
+
+// ============================================================
+// Pagos
+// ============================================================
+
+model Payment {
+  id          String   @id @default(uuid())
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id])
+  plan        String
+  amount      Decimal  @db.Decimal(10, 2)
+  paymentDate DateTime @default(now()) @map("payment_date")
+  createdAt   DateTime @default(now())
+
+  @@index([memberId])
+  @@index([paymentDate])
+  @@map("payments")
+}
+
+// ============================================================
+// Asistencia
+// ============================================================
+
+model Attendance {
+  id           String   @id @default(uuid())
+  memberId     String
+  member       Member   @relation(fields: [memberId], references: [id])
+  checkInTime  DateTime @default(now()) @map("check_in_time")
+  createdAt    DateTime @default(now())
+
+  @@index([memberId])
+  @@index([checkInTime])
+  @@map("attendance")
+}
+
+model FailedAccessAttempt {
+  id           String   @id @default(uuid())
+  memberId     String?
+  member       Member?  @relation(fields: [memberId], references: [id])
+  reason       String
+  attemptTime DateTime @default(now()) @map("attempt_time")
+  createdAt    DateTime @default(now())
+
+  @@index([attemptTime])
+  @@map("failed_access_attempts")
+}
+
+// ============================================================
+// Calendario / Clases
+// ============================================================
+
+model ScheduleClass {
+  id          String   @id @default(uuid())
+  className   String   @map("class_name")
+  dayOfWeek   String   @map("day_of_week")
+  startTime   String   @map("start_time")
+  instructor  String
+  maxCapacity Int      @default(20) @map("max_capacity")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    ClassBooking[]
+
+  @@map("schedule_classes")
+}
+
+model ClassBooking {
+  id              String       @id @default(uuid())
+  classId         String
+  scheduleClass   ScheduleClass @relation(fields: [classId], references: [id])
+  memberId        String
+  member          Member       @relation(fields: [memberId], references: [id])
+  createdAt       DateTime     @default(now())
+
+  @@unique([classId, memberId])
+  @@index([classId])
+  @@index([memberId])
+  @@map("class_bookings")
+}
+
+// ============================================================
+// Avisos
+// ============================================================
+
+model Notice {
+  id        String   @id @default(uuid())
+  title     String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notices")
+}
+
+// ============================================================
+// Rutinas (feature nueva, usa exercises-dataset)
+// ============================================================
+
+enum RoutineStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Routine {
+  id          String          @id @default(uuid())
+  trainerId   String
+  trainer     Trainer         @relation(fields: [trainerId], references: [id])
+  name        String
+  description String?         @db.Text
+  status      RoutineStatus   @default(DRAFT)
+  exercises   RoutineExercise[]
+  versions    RoutineVersion[]
+  assignments RoutineAssignment[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([trainerId])
+  @@index([status])
+  @@map("routines")
+}
+
+model RoutineVersion {
+  id          String   @id @default(uuid())
+  routineId   String
+  routine     Routine  @relation(fields: [routineId], references: [id])
+  version     Int
+  exercises   Json
+  changeNote  String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  @@unique([routineId, version])
+  @@index([routineId])
+  @@map("routine_versions")
+}
+
+model RoutineExercise {
+  id           String  @id @default(uuid())
+  routineId    String
+  routine      Routine @relation(fields: [routineId], references: [id])
+  exerciseId   String
+  sets         Int
+  reps         String  @db.VarChar(64)
+  restSeconds  Int?
+  notes        String? @db.Text
+  order        Int     @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([routineId])
+  @@index([exerciseId])
+  @@map("routine_exercises")
+}
+
+model RoutineAssignment {
+  id          String    @id @default(uuid())
+  memberId    String
+  member      Member    @relation(fields: [memberId], references: [id])
+  trainerId   String
+  trainer     Trainer   @relation(fields: [trainerId], references: [id])
+  routineId   String
+  routine     Routine   @relation(fields: [routineId], references: [id])
+  startDate   DateTime  @default(now()) @map("start_date")
+  dueDate     DateTime? @map("due_date")
+  notes       String?   @db.Text
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workoutLogs WorkoutLog[]
+
+  @@index([memberId])
+  @@index([trainerId])
+  @@index([routineId])
+  @@map("routine_assignments")
+}
+
+model WorkoutLog {
+  id                  String            @id @default(uuid())
+  memberId            String
+  member              Member            @relation(fields: [memberId], references: [id])
+  assignmentId        String
+  assignment          RoutineAssignment @relation(fields: [assignmentId], references: [id])
+  routineId           String
+  exerciseId          String
+  routineExerciseId   String?
+  completedReps       Int?
+  weight              Float?
+  durationSeconds     Int?
+  notes               String?           @db.Text
+  date                DateTime          @default(now())
+  createdAt           DateTime          @default(now())
+
+  @@index([memberId, date])
+  @@index([assignmentId])
+  @@index([exerciseId])
+  @@map("workout_logs")
+}
