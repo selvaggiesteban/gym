@@ -226,6 +226,7 @@ model RoutineExercise {
   routineId    String
   routine      Routine @relation(fields: [routineId], references: [id])
   exerciseId   String
+  exerciseName String? @db.VarChar(200)
   sets         Int
   reps         String  @db.VarChar(64)
   restSeconds  Int?

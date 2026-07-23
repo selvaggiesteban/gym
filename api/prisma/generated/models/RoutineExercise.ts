@@ -42,6 +42,7 @@ export type RoutineExerciseMinAggregateOutputType = {
   id: string | null
   routineId: string | null
   exerciseId: string | null
+  exerciseName: string | null
   sets: number | null
   reps: string | null
   restSeconds: number | null
@@ -54,6 +55,7 @@ export type RoutineExerciseMaxAggregateOutputType = {
   id: string | null
   routineId: string | null
   exerciseId: string | null
+  exerciseName: string | null
   sets: number | null
   reps: string | null
   restSeconds: number | null
@@ -66,6 +68,7 @@ export type RoutineExerciseCountAggregateOutputType = {
   id: number
   routineId: number
   exerciseId: number
+  exerciseName: number
   sets: number
   reps: number
   restSeconds: number
@@ -92,6 +95,7 @@ export type RoutineExerciseMinAggregateInputType = {
   id?: true
   routineId?: true
   exerciseId?: true
+  exerciseName?: true
   sets?: true
   reps?: true
   restSeconds?: true
@@ -104,6 +108,7 @@ export type RoutineExerciseMaxAggregateInputType = {
   id?: true
   routineId?: true
   exerciseId?: true
+  exerciseName?: true
   sets?: true
   reps?: true
   restSeconds?: true
@@ -116,6 +121,7 @@ export type RoutineExerciseCountAggregateInputType = {
   id?: true
   routineId?: true
   exerciseId?: true
+  exerciseName?: true
   sets?: true
   reps?: true
   restSeconds?: true
@@ -215,6 +221,7 @@ export type RoutineExerciseGroupByOutputType = {
   id: string
   routineId: string
   exerciseId: string
+  exerciseName: string | null
   sets: number
   reps: string
   restSeconds: number | null
@@ -250,6 +257,7 @@ export type RoutineExerciseWhereInput = {
   id?: Prisma.StringFilter<"RoutineExercise"> | string
   routineId?: Prisma.StringFilter<"RoutineExercise"> | string
   exerciseId?: Prisma.StringFilter<"RoutineExercise"> | string
+  exerciseName?: Prisma.StringNullableFilter<"RoutineExercise"> | string | null
   sets?: Prisma.IntFilter<"RoutineExercise"> | number
   reps?: Prisma.StringFilter<"RoutineExercise"> | string
   restSeconds?: Prisma.IntNullableFilter<"RoutineExercise"> | number | null
@@ -263,6 +271,7 @@ export type RoutineExerciseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
   exerciseId?: Prisma.SortOrder
+  exerciseName?: Prisma.SortOrderInput | Prisma.SortOrder
   sets?: Prisma.SortOrder
   reps?: Prisma.SortOrder
   restSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +289,7 @@ export type RoutineExerciseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.RoutineExerciseWhereInput | Prisma.RoutineExerciseWhereInput[]
   routineId?: Prisma.StringFilter<"RoutineExercise"> | string
   exerciseId?: Prisma.StringFilter<"RoutineExercise"> | string
+  exerciseName?: Prisma.StringNullableFilter<"RoutineExercise"> | string | null
   sets?: Prisma.IntFilter<"RoutineExercise"> | number
   reps?: Prisma.StringFilter<"RoutineExercise"> | string
   restSeconds?: Prisma.IntNullableFilter<"RoutineExercise"> | number | null
@@ -293,6 +303,7 @@ export type RoutineExerciseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
   exerciseId?: Prisma.SortOrder
+  exerciseName?: Prisma.SortOrderInput | Prisma.SortOrder
   sets?: Prisma.SortOrder
   reps?: Prisma.SortOrder
   restSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -313,6 +324,7 @@ export type RoutineExerciseScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"RoutineExercise"> | string
   routineId?: Prisma.StringWithAggregatesFilter<"RoutineExercise"> | string
   exerciseId?: Prisma.StringWithAggregatesFilter<"RoutineExercise"> | string
+  exerciseName?: Prisma.StringNullableWithAggregatesFilter<"RoutineExercise"> | string | null
   sets?: Prisma.IntWithAggregatesFilter<"RoutineExercise"> | number
   reps?: Prisma.StringWithAggregatesFilter<"RoutineExercise"> | string
   restSeconds?: Prisma.IntNullableWithAggregatesFilter<"RoutineExercise"> | number | null
@@ -324,6 +336,7 @@ export type RoutineExerciseScalarWhereWithAggregatesInput = {
 export type RoutineExerciseCreateInput = {
   id?: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -337,6 +350,7 @@ export type RoutineExerciseUncheckedCreateInput = {
   id?: string
   routineId: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -348,6 +362,7 @@ export type RoutineExerciseUncheckedCreateInput = {
 export type RoutineExerciseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -361,6 +376,7 @@ export type RoutineExerciseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   routineId?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -373,6 +389,7 @@ export type RoutineExerciseCreateManyInput = {
   id?: string
   routineId: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -384,6 +401,7 @@ export type RoutineExerciseCreateManyInput = {
 export type RoutineExerciseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -396,6 +414,7 @@ export type RoutineExerciseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   routineId?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -424,6 +443,7 @@ export type RoutineExerciseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
   exerciseId?: Prisma.SortOrder
+  exerciseName?: Prisma.SortOrder
   sets?: Prisma.SortOrder
   reps?: Prisma.SortOrder
   restSeconds?: Prisma.SortOrder
@@ -442,6 +462,7 @@ export type RoutineExerciseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
   exerciseId?: Prisma.SortOrder
+  exerciseName?: Prisma.SortOrder
   sets?: Prisma.SortOrder
   reps?: Prisma.SortOrder
   restSeconds?: Prisma.SortOrder
@@ -454,6 +475,7 @@ export type RoutineExerciseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
   exerciseId?: Prisma.SortOrder
+  exerciseName?: Prisma.SortOrder
   sets?: Prisma.SortOrder
   reps?: Prisma.SortOrder
   restSeconds?: Prisma.SortOrder
@@ -521,6 +543,7 @@ export type NullableIntFieldUpdateOperationsInput = {
 export type RoutineExerciseCreateWithoutRoutineInput = {
   id?: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -532,6 +555,7 @@ export type RoutineExerciseCreateWithoutRoutineInput = {
 export type RoutineExerciseUncheckedCreateWithoutRoutineInput = {
   id?: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -573,6 +597,7 @@ export type RoutineExerciseScalarWhereInput = {
   id?: Prisma.StringFilter<"RoutineExercise"> | string
   routineId?: Prisma.StringFilter<"RoutineExercise"> | string
   exerciseId?: Prisma.StringFilter<"RoutineExercise"> | string
+  exerciseName?: Prisma.StringNullableFilter<"RoutineExercise"> | string | null
   sets?: Prisma.IntFilter<"RoutineExercise"> | number
   reps?: Prisma.StringFilter<"RoutineExercise"> | string
   restSeconds?: Prisma.IntNullableFilter<"RoutineExercise"> | number | null
@@ -584,6 +609,7 @@ export type RoutineExerciseScalarWhereInput = {
 export type RoutineExerciseCreateManyRoutineInput = {
   id?: string
   exerciseId: string
+  exerciseName?: string | null
   sets: number
   reps: string
   restSeconds?: number | null
@@ -595,6 +621,7 @@ export type RoutineExerciseCreateManyRoutineInput = {
 export type RoutineExerciseUpdateWithoutRoutineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -606,6 +633,7 @@ export type RoutineExerciseUpdateWithoutRoutineInput = {
 export type RoutineExerciseUncheckedUpdateWithoutRoutineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -617,6 +645,7 @@ export type RoutineExerciseUncheckedUpdateWithoutRoutineInput = {
 export type RoutineExerciseUncheckedUpdateManyWithoutRoutineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   exerciseId?: Prisma.StringFieldUpdateOperationsInput | string
+  exerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sets?: Prisma.IntFieldUpdateOperationsInput | number
   reps?: Prisma.StringFieldUpdateOperationsInput | string
   restSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -631,6 +660,7 @@ export type RoutineExerciseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   routineId?: boolean
   exerciseId?: boolean
+  exerciseName?: boolean
   sets?: boolean
   reps?: boolean
   restSeconds?: boolean
@@ -646,6 +676,7 @@ export type RoutineExerciseSelectScalar = {
   id?: boolean
   routineId?: boolean
   exerciseId?: boolean
+  exerciseName?: boolean
   sets?: boolean
   reps?: boolean
   restSeconds?: boolean
@@ -654,7 +685,7 @@ export type RoutineExerciseSelectScalar = {
   createdAt?: boolean
 }
 
-export type RoutineExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "routineId" | "exerciseId" | "sets" | "reps" | "restSeconds" | "notes" | "order" | "createdAt", ExtArgs["result"]["routineExercise"]>
+export type RoutineExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "routineId" | "exerciseId" | "exerciseName" | "sets" | "reps" | "restSeconds" | "notes" | "order" | "createdAt", ExtArgs["result"]["routineExercise"]>
 export type RoutineExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
 }
@@ -668,6 +699,7 @@ export type $RoutineExercisePayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     routineId: string
     exerciseId: string
+    exerciseName: string | null
     sets: number
     reps: string
     restSeconds: number | null
@@ -1047,6 +1079,7 @@ export interface RoutineExerciseFieldRefs {
   readonly id: Prisma.FieldRef<"RoutineExercise", 'String'>
   readonly routineId: Prisma.FieldRef<"RoutineExercise", 'String'>
   readonly exerciseId: Prisma.FieldRef<"RoutineExercise", 'String'>
+  readonly exerciseName: Prisma.FieldRef<"RoutineExercise", 'String'>
   readonly sets: Prisma.FieldRef<"RoutineExercise", 'Int'>
   readonly reps: Prisma.FieldRef<"RoutineExercise", 'String'>
   readonly restSeconds: Prisma.FieldRef<"RoutineExercise", 'Int'>

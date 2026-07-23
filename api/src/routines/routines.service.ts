@@ -8,6 +8,7 @@ export type CreateRoutineInput = {
 
 export type AddExerciseInput = {
   exerciseId: string;
+  exerciseName?: string;
   sets: number;
   reps: string;
   restSeconds?: number;
@@ -66,7 +67,7 @@ export class RoutinesService {
     await this.assertOwner(routineId, trainerId);
     const order = input.order ?? (await this.prisma.client.routineExercise.count({ where: { routineId } }));
     return this.prisma.client.routineExercise.create({
-      data: { routineId, exerciseId: input.exerciseId, sets: input.sets, reps: input.reps, restSeconds: input.restSeconds, notes: input.notes, order },
+      data: { routineId, exerciseId: input.exerciseId, exerciseName: input.exerciseName, sets: input.sets, reps: input.reps, restSeconds: input.restSeconds, notes: input.notes, order },
     });
   }
 

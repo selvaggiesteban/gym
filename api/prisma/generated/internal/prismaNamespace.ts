@@ -1519,6 +1519,7 @@ export const RoutineExerciseScalarFieldEnum = {
   id: 'id',
   routineId: 'routineId',
   exerciseId: 'exerciseId',
+  exerciseName: 'exerciseName',
   sets: 'sets',
   reps: 'reps',
   restSeconds: 'restSeconds',
@@ -1713,6 +1714,7 @@ export const RoutineExerciseOrderByRelevanceFieldEnum = {
   id: 'id',
   routineId: 'routineId',
   exerciseId: 'exerciseId',
+  exerciseName: 'exerciseName',
   reps: 'reps',
   notes: 'notes'
 } as const

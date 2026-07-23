@@ -146,15 +146,16 @@ CREATE TABLE `routine_versions`
 
 CREATE TABLE `routine_exercises`
 (
-    `id`                VARCHAR(191) NOT NULL,
-    `routineId`         VARCHAR(191) NOT NULL,
-    `exerciseId`        VARCHAR(191) NOT NULL,
-    `sets`              INT          NOT NULL,
-    `reps`              VARCHAR(64)  NOT NULL,
-    `restSeconds`       INT          NULL,
-    `notes`             LONGTEXT     NULL,
-    `order`             INT          NOT NULL DEFAULT 0,
-    `createdAt`         DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `id`                VARCHAR(191)  NOT NULL,
+    `routineId`         VARCHAR(191)  NOT NULL,
+    `exerciseId`        VARCHAR(191)  NOT NULL,
+    `exerciseName`      VARCHAR(200)  NULL,
+    `sets`              INT           NOT NULL,
+    `reps`              VARCHAR(64)   NOT NULL,
+    `restSeconds`       INT           NULL,
+    `notes`             LONGTEXT      NULL,
+    `order`             INT           NOT NULL DEFAULT 0,
+    `createdAt`         DATETIME(3)   NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`),
     INDEX `routine_exercises_routineId_idx` (`routineId`),
     INDEX `routine_exercises_exerciseId_idx` (`exerciseId`)
