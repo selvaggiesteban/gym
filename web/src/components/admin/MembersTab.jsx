@@ -43,7 +43,7 @@ const MembersTab = ({ members, loadData }) => {
     if (!newMember.email.trim()) { errors.email = 'El correo electrónico es obligatorio'; isValid = false; }
     else if (!validateEmail(newMember.email)) { errors.email = 'El correo electrónico debe ser válido'; isValid = false; }
     if (!newMember.password) { errors.password = 'La contraseña es obligatoria'; isValid = false; }
-    else if (newMember.password.length < 6) { errors.password = 'La contraseña debe tener al menos 6 caracteres'; isValid = false; }
+    else if (newMember.password.length < 8) { errors.password = 'La contraseña debe tener al menos 8 caracteres'; isValid = false; }
     setValidationErrors(errors);
     return isValid;
   };
@@ -205,7 +205,7 @@ const MembersTab = ({ members, loadData }) => {
     return membersList;
   }, [members, filter, searchTerm, showArchived]);
 
-  const isFormValid = newMember.name.trim() && newMember.email.trim() && validateEmail(newMember.email) && newMember.password && newMember.password.length >= 6;
+  const isFormValid = newMember.name.trim() && newMember.email.trim() && validateEmail(newMember.email) && newMember.password && newMember.password.length >= 8;
 
   return (
     <div className="space-y-6">
@@ -237,7 +237,7 @@ const MembersTab = ({ members, loadData }) => {
               </div>
               <div>
                 <Label htmlFor="password">Contraseña *</Label>
-                <Input id="password" type="password" value={newMember.password} onChange={(e) => handleInputChange('password', e.target.value)} placeholder="Mínimo 6 caracteres" className={validationErrors.password ? 'border-red-500' : ''} />
+                    <Input id="password" type="password" value={newMember.password} onChange={(e) => handleInputChange('password', e.target.value)} placeholder="Mínimo 8 caracteres" className={validationErrors.password ? 'border-red-500' : ''} />
                 {validationErrors.password && <p className="text-red-500 text-xs mt-1">{validationErrors.password}</p>}
               </div>
               <div>

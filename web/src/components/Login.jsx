@@ -52,11 +52,12 @@ export default function Login() {
         return;
       }
 
-      const { error } = await signUp(formData.email, formData.password, {
+      const { error } = await signUp({
+        email: formData.email,
+        password: formData.password,
         name: formData.name,
         whatsapp: formData.whatsapp,
         birthDate: formData.birthDate,
-        role: 'member'
       });
 
       if (!error) {
@@ -95,10 +96,10 @@ export default function Login() {
       });
       return;
     }
-    if (newPassword.length < 6) {
+    if (newPassword.length < 8) {
       toast({
         title: "Error",
-        description: "La contraseÃ±a debe tener al menos 6 caracteres",
+        description: "La contraseÃ±a debe tener al menos 8 caracteres",
         variant: "destructive",
       });
       return;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { LogOut, Dumbbell, Users, BarChart3 } from 'lucide-react';
+import { LogOut, Dumbbell, Users } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ import AdminOverview from '@/components/admin/AdminOverview';
 
 export default function AdminDashboard() {
   const { user, signOut } = useAuth();
-  const [members, setMembers] = useState([]);
 
   const membersQuery = useQuery({
     queryKey: ['members'],

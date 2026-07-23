@@ -1,8 +1,9 @@
-﻿import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { MembersService, CreateMemberInput } from './members.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { Request } from 'express';
 
 @Controller('members')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -14,7 +15,10 @@ export class MembersController {
   list() { return this.service.list(); }
 
   @Get('me')
-  me() { return null; }
+  me(@Req() req: Request) {
+    const user = req.user as any;
+    return this.service.get(user.id);
+  }
 
   @Roles('ADMIN')
   @Post()

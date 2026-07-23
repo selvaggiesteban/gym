@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from '@/lib/helmet';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
-import { LogOut, Dumbbell, Users, ClipboardList } from 'lucide-react';
+import { LogOut, Dumbbell } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -75,7 +75,7 @@ export default function TrainerDashboard() {
                   <Dumbbell className="w-5 h-5 text-green-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600">{routines.filter(r => r.isPublished).length}</div>
+                  <div className="text-3xl font-bold text-green-600">{routines.filter(r => r.status === 'PUBLISHED').length}</div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -93,11 +93,11 @@ export default function TrainerDashboard() {
                       routines.slice(0, 5).map(routine => (
                         <div key={routine.id} className="border border-gray-200 p-3 rounded-lg flex justify-between items-center">
                           <div>
-                            <h4 className="font-bold">{routine.title}</h4>
+                            <h4 className="font-bold">{routine.name}</h4>
                             <p className="text-xs text-gray-500">{routine.exercises?.length || 0} ejercicios · v{routine.currentVersion || 1}</p>
                           </div>
-                          <span className={`px-2 py-0.5 rounded text-xs font-bold ${routine.isPublished ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'}`}>
-                            {routine.isPublished ? 'PUBLICADA' : 'BORRADOR'}
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold ${routine.status === 'PUBLISHED' ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'}`}>
+                            {routine.status === 'PUBLISHED' ? 'PUBLICADA' : 'BORRADOR'}
                           </span>
                         </div>
                       ))
