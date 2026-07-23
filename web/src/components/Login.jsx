@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
+import { Helmet } from '@/lib/helmet';
+import { motion } from 'motion/react';
 import { Eye, EyeOff, User, Lock, Mail, Phone, Calendar } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -37,8 +37,8 @@ export default function Login() {
       const { error } = await signIn(formData.email, formData.password);
       if (!error) {
         toast({
-          title: "¡Bienvenido!",
-          description: "Has iniciado sesión correctamente",
+          title: "Â¡Bienvenido!",
+          description: "Has iniciado sesiÃ³n correctamente",
         });
       }
     } else {
@@ -61,7 +61,7 @@ export default function Login() {
 
       if (!error) {
         toast({
-          title: "¡Cuenta creada!",
+          title: "Â¡Cuenta creada!",
           description: "Tu cuenta ha sido creada exitosamente. Revisa tu email para confirmar.",
         });
         setIsLogin(true);
@@ -79,7 +79,7 @@ export default function Login() {
       setResetSent(true);
       toast({
         title: "Email enviado",
-        description: "Revisa tu casilla de correo para restablecer tu contraseña.",
+        description: "Revisa tu casilla de correo para restablecer tu contraseÃ±a.",
       });
     }
     setLoading(false);
@@ -90,7 +90,7 @@ export default function Login() {
     if (newPassword !== confirmPassword) {
       toast({
         title: "Error",
-        description: "Las contraseñas no coinciden",
+        description: "Las contraseÃ±as no coinciden",
         variant: "destructive",
       });
       return;
@@ -98,7 +98,7 @@ export default function Login() {
     if (newPassword.length < 6) {
       toast({
         title: "Error",
-        description: "La contraseña debe tener al menos 6 caracteres",
+        description: "La contraseÃ±a debe tener al menos 6 caracteres",
         variant: "destructive",
       });
       return;
@@ -127,13 +127,13 @@ export default function Login() {
     setConfirmPassword('');
   };
 
-  // Modo: Nueva contraseña (el usuario volvió del email de recovery)
+  // Modo: Nueva contraseÃ±a (el usuario volviÃ³ del email de recovery)
   if (recoveryMode) {
     return (
       <>
         <Helmet>
-          <title>NÓMADES OCR - Nueva Contraseña</title>
-          <meta name="description" content="Establece tu nueva contraseña de NÓMADES OCR" />
+          <title>NÃ“MADES OCR - Nueva ContraseÃ±a</title>
+          <meta name="description" content="Establece tu nueva contraseÃ±a de NÃ“MADES OCR" />
         </Helmet>
         
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -145,22 +145,22 @@ export default function Login() {
           >
             <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-black">NÓMADES OCR</CardTitle>
+                <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
                 <CardDescription className="text-gray-600">
-                  Establece tu nueva contraseña
+                  Establece tu nueva contraseÃ±a
                 </CardDescription>
               </CardHeader>
               
               <CardContent>
                 <form onSubmit={handleUpdatePassword} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="newPassword" className="text-black font-medium">Nueva contraseña</Label>
+                    <Label htmlFor="newPassword" className="text-black font-medium">Nueva contraseÃ±a</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="newPassword"
                         type={showNewPassword ? "text" : "password"}
-                        placeholder="Tu nueva contraseña"
+                        placeholder="Tu nueva contraseÃ±a"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="pl-10 pr-10"
@@ -177,13 +177,13 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-black font-medium">Confirmar contraseña</Label>
+                    <Label htmlFor="confirmPassword" className="text-black font-medium">Confirmar contraseÃ±a</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="confirmPassword"
                         type={showNewPassword ? "text" : "password"}
-                        placeholder="Repite tu nueva contraseña"
+                        placeholder="Repite tu nueva contraseÃ±a"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="pl-10"
@@ -197,7 +197,7 @@ export default function Login() {
                     className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
                     disabled={loading}
                   >
-                    {loading ? 'Actualizando...' : 'ACTUALIZAR CONTRASEÑA'}
+                    {loading ? 'Actualizando...' : 'ACTUALIZAR CONTRASEÃ‘A'}
                   </Button>
                 </form>
 
@@ -217,13 +217,13 @@ export default function Login() {
     );
   }
 
-  // Modo: Enviar email de recuperación
+  // Modo: Enviar email de recuperaciÃ³n
   if (resetMode) {
     return (
       <>
         <Helmet>
-          <title>NÓMADES OCR - Restablecer Contraseña</title>
-          <meta name="description" content="Restablece tu contraseña de NÓMADES OCR" />
+          <title>NÃ“MADES OCR - Restablecer ContraseÃ±a</title>
+          <meta name="description" content="Restablece tu contraseÃ±a de NÃ“MADES OCR" />
         </Helmet>
         
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -235,9 +235,9 @@ export default function Login() {
           >
             <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-black">NÓMADES OCR</CardTitle>
+                <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
                 <CardDescription className="text-gray-600">
-                  {resetSent ? 'Revisa tu email' : 'Restablece tu contraseña'}
+                  {resetSent ? 'Revisa tu email' : 'Restablece tu contraseÃ±a'}
                 </CardDescription>
               </CardHeader>
               
@@ -249,7 +249,7 @@ export default function Login() {
                         Te enviamos un email a <strong>{resetEmail}</strong>
                       </p>
                       <p className="text-green-600 text-sm mt-2">
-                        Hacé clic en el link del email para restablecer tu contraseña.
+                        HacÃ© clic en el link del email para restablecer tu contraseÃ±a.
                       </p>
                     </div>
                     <Button 
@@ -283,7 +283,7 @@ export default function Login() {
                       className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
                       disabled={loading}
                     >
-                      {loading ? 'Enviando...' : 'ENVIAR LINK DE RECUPERACIÓN'}
+                      {loading ? 'Enviando...' : 'ENVIAR LINK DE RECUPERACIÃ“N'}
                     </Button>
                   </form>
                 )}
@@ -308,8 +308,8 @@ export default function Login() {
   return (
     <>
       <Helmet>
-        <title>NÓMADES OCR - Acceso al Sistema</title>
-        <meta name="description" content="Accede a tu cuenta de NÓMADES OCR para gestionar tu membresía del gimnasio" />
+        <title>NÃ“MADES OCR - Acceso al Sistema</title>
+        <meta name="description" content="Accede a tu cuenta de NÃ“MADES OCR para gestionar tu membresÃ­a del gimnasio" />
       </Helmet>
       
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -321,9 +321,9 @@ export default function Login() {
         >
           <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-black">NÓMADES OCR</CardTitle>
+              <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
               <CardDescription className="text-gray-600">
-                {isLogin ? 'Inicia sesión en tu cuenta' : 'Crea tu cuenta nueva'}
+                {isLogin ? 'Inicia sesiÃ³n en tu cuenta' : 'Crea tu cuenta nueva'}
               </CardDescription>
             </CardHeader>
             
@@ -356,7 +356,7 @@ export default function Login() {
                           id="whatsapp"
                           name="whatsapp"
                           type="tel"
-                          placeholder="Tu número de WhatsApp"
+                          placeholder="Tu nÃºmero de WhatsApp"
                           value={formData.whatsapp}
                           onChange={handleChange}
                           className="pl-10"
@@ -401,14 +401,14 @@ export default function Login() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-black font-medium">Contraseña</Label>
+                  <Label htmlFor="password" className="text-black font-medium">ContraseÃ±a</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <Input
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Tu contraseña"
+                      placeholder="Tu contraseÃ±a"
                       value={formData.password}
                       onChange={handleChange}
                       className="pl-10 pr-10"
@@ -429,7 +429,7 @@ export default function Login() {
                   className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
                   disabled={loading}
                 >
-                  {loading ? 'Procesando...' : (isLogin ? 'INICIAR SESIÓN' : 'CREAR CUENTA')}
+                  {loading ? 'Procesando...' : (isLogin ? 'INICIAR SESIÃ“N' : 'CREAR CUENTA')}
                 </Button>
               </form>
 
@@ -441,7 +441,7 @@ export default function Login() {
                   }}
                   className="text-black hover:underline font-medium"
                 >
-                  {isLogin ? '¿No tienes cuenta? Crear cuenta' : '¿Ya tienes cuenta? Iniciar sesión'}
+                  {isLogin ? 'Â¿No tienes cuenta? Crear cuenta' : 'Â¿Ya tienes cuenta? Iniciar sesiÃ³n'}
                 </button>
               </div>
 
@@ -451,7 +451,7 @@ export default function Login() {
                     onClick={() => setResetMode(true)}
                     className="text-gray-600 hover:text-black text-sm"
                   >
-                    ¿Olvidaste tu contraseña?
+                    Â¿Olvidaste tu contraseÃ±a?
                   </button>
                 </div>
               )}

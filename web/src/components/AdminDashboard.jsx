@@ -1,218 +1,78 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
-import { LogOut, Users, CreditCard, Calendar, AlertTriangle, Clock, BarChart2, QrCode } from 'lucide-react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'motion/react';
+import { LogOut, Dumbbell, Users, BarChart3 } from 'lucide-react';
+import { api } from '@/lib/apiClient';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Helmet } from '@/lib/helmet';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
-import { useToast } from '@/components/ui/use-toast';
-import AdminOverview from '@/components/admin/AdminOverview';
 import MembersTab from '@/components/admin/MembersTab';
 import PaymentsTab from '@/components/admin/PaymentsTab';
 import AttendanceTab from '@/components/admin/AttendanceTab';
 import ScheduleTab from '@/components/admin/ScheduleTab';
 import NoticesTab from '@/components/admin/NoticesTab';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import QRCode from "qrcode.react";
-const TABS = [{
-  id: 'overview',
-  label: 'Resumen',
-  icon: BarChart2
-}, {
-  id: 'members',
-  label: 'Miembros',
-  icon: Users
-}, {
-  id: 'payments',
-  label: 'Pagos',
-  icon: CreditCard
-}, {
-  id: 'attendance',
-  label: 'Asistencia',
-  icon: Clock
-}, {
-  id: 'schedule',
-  label: 'Calendario',
-  icon: Calendar
-}, {
-  id: 'notices',
-  label: 'Avisos',
-  icon: AlertTriangle
-}];
+import RoutinesTab from '@/components/admin/RoutinesTab';
+import AdminOverview from '@/components/admin/AdminOverview';
+
 export default function AdminDashboard() {
-  const {
-    signOut
-  } = useAuth();
-  const {
-    toast
-  } = useToast();
-  const [activeTab, setActiveTab] = useState(() => {
-    return sessionStorage.getItem('adminActiveTab') || 'overview';
+  const { user, signOut } = useAuth();
+  const [members, setMembers] = useState([]);
+
+  const membersQuery = useQuery({
+    queryKey: ['members'],
+    queryFn: () => api('/members'),
   });
-  const [data, setData] = useState({
-    members: [],
-    payments: [],
-    attendance: [],
-    failedAttempts: [],
-    schedule: [],
-    notices: []
+
+  const paymentsQuery = useQuery({
+    queryKey: ['payments'],
+    queryFn: () => api('/payments'),
   });
-  const [loading, setLoading] = useState(true);
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const {
-        data: membersData,
-        error: membersError
-      } = await supabase.functions.invoke('get-users');
-      if (membersError) throw membersError;
-      if (membersData.error) throw new Error(membersData.error);
-      const {
-        data: paymentsData,
-        error: paymentsError
-      } = await supabase.from('payments').select('*, profiles(name)');
-      if (paymentsError) throw paymentsError;
-      const {
-        data: attendanceData,
-        error: attendanceError
-      } = await supabase.from('attendance').select('*, profiles(name)');
-      if (attendanceError) throw attendanceError;
-      const {
-        data: failedAttemptsData,
-        error: failedAttemptsError
-      } = await supabase.from('failed_access_attempts').select('*, profiles(name)');
-      if (failedAttemptsError) throw failedAttemptsError;
-      const {
-        data: scheduleData,
-        error: scheduleError
-      } = await supabase.from('schedule').select('*, class_bookings(*, profiles(name))');
-      if (scheduleError) throw scheduleError;
-      const {
-        data: noticesData,
-        error: noticesError
-      } = await supabase.from('notices').select('*').order('created_at', {
-        ascending: false
-      });
-      if (noticesError) throw noticesError;
-      setData({
-        members: membersData.members,
-        payments: paymentsData,
-        attendance: attendanceData,
-        failedAttempts: failedAttemptsData,
-        schedule: scheduleData,
-        notices: noticesData
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: `No se pudieron cargar los datos del panel: ${error.message}`,
-        variant: "destructive"
-      });
-      console.error("Data loading error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-  useEffect(() => {
-    sessionStorage.setItem('adminActiveTab', activeTab);
-  }, [activeTab]);
-  const renderTabContent = () => {
-    if (loading) {
-      return <div className="flex justify-center items-center p-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div></div>;
-    }
-    switch (activeTab) {
-      case 'overview':
-        return <AdminOverview data={data} />;
-      case 'members':
-        return <MembersTab members={data.members} loadData={loadData} />;
-      case 'payments':
-        return <PaymentsTab payments={data.payments} loadData={loadData} />;
-      case 'attendance':
-        return <AttendanceTab attendance={data.attendance} failedAttempts={data.failedAttempts} />;
-      case 'schedule':
-        return <ScheduleTab schedule={data.schedule} loadData={loadData} />;
-      case 'notices':
-        return <NoticesTab notices={data.notices} loadData={loadData} />;
-      default:
-        return null;
-    }
+
+  const loadData = () => {
+    membersQuery.refetch();
+    paymentsQuery.refetch();
   };
-  const attendanceUrl = `${window.location.origin}/attendance`;
-  return <>
-      <Helmet>
-        <title>NÓMADES OCR - Panel de Administración</title>
-        <meta name="description" content="Panel de administración para gestionar NÓMADES OCR" />
-      </Helmet>
 
-      <div className="min-h-screen bg-white p-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{
-          opacity: 0,
-          y: -20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} className="flex justify-between items-center mb-8 flex-wrap gap-4">
-            <div>
-              <h1 className="text-4xl font-bold text-black">NÓMADES OCR</h1>
-              <p className="text-gray-600">Panel de Administración
-Creado por Teems Agency</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
-                    <QrCode className="w-4 h-4 mr-2" />
-                    QR Asistencia
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-center text-2xl">QR para Asistencia Rápida</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center justify-center p-4 gap-4">
-                    <QRCode value={attendanceUrl} size={256} level="H" />
-                    <p className="text-center text-gray-600">
-                      Escanea este código para ir a la página de asistencia rápida.
-                    </p>
-                    <a href={attendanceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">
-                      {attendanceUrl}
-                    </a>
-                  </div>
-                </DialogContent>
-              </Dialog>
-              <Button onClick={signOut} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
-                <LogOut className="w-4 h-4 mr-2" />
-                Cerrar Sesión
-              </Button>
-            </div>
-          </motion.div>
+  const membersData = membersQuery.data || [];
+  const paymentsData = paymentsQuery.data || [];
 
-          <div className="flex flex-wrap gap-2 mb-8">
-            {TABS.map(tab => {
-            const Icon = tab.icon;
-            return <Button key={tab.id} onClick={() => setActiveTab(tab.id)} variant={activeTab === tab.id ? "default" : "outline"} className={`border-2 border-black ${activeTab === tab.id ? 'bg-black text-white shadow-[2px_2px_0px_0px_#000000]' : 'hover:bg-black hover:text-white'}`}>
-                  <Icon className="w-4 h-4 mr-2" />
-                  {tab.label}
-                </Button>;
-          })}
+  return (
+    <div className="min-h-screen bg-white p-6">
+      <Helmet title="GYM - Admin" />
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="max-w-7xl mx-auto">
+        <header className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-black">GYM · Admin</h1>
+            <p className="text-gray-600">Panel de administración</p>
           </div>
+          <Button onClick={signOut} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+            <LogOut className="w-4 h-4 mr-2" />Cerrar Sesión
+          </Button>
+        </header>
 
-          <motion.div key={activeTab} initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.3
-        }}>
-            {renderTabContent()}
-          </motion.div>
-        </div>
-      </div>
-    </>;
+        <AdminOverview />
+
+        <Tabs defaultValue="members" className="w-full">
+          <TabsList className="grid grid-cols-7 w-full">
+            <TabsTrigger value="members">Miembros</TabsTrigger>
+            <TabsTrigger value="routines">Rutinas</TabsTrigger>
+            <TabsTrigger value="payments">Pagos</TabsTrigger>
+            <TabsTrigger value="attendance">Asistencia</TabsTrigger>
+            <TabsTrigger value="schedule">Calendario</TabsTrigger>
+            <TabsTrigger value="notices">Avisos</TabsTrigger>
+            <TabsTrigger value="resumen">Resumen</TabsTrigger>
+          </TabsList>
+          <TabsContent value="members"><MembersTab members={membersData} loadData={loadData} /></TabsContent>
+          <TabsContent value="routines"><RoutinesTab /></TabsContent>
+          <TabsContent value="payments"><PaymentsTab payments={paymentsData} loadData={loadData} /></TabsContent>
+          <TabsContent value="attendance"><AttendanceTab /></TabsContent>
+          <TabsContent value="schedule"><ScheduleTab /></TabsContent>
+          <TabsContent value="notices"><NoticesTab /></TabsContent>
+          <TabsContent value="resumen"><AdminOverview /></TabsContent>
+        </Tabs>
+      </motion.div>
+    </div>
+  );
 }

@@ -1,208 +1,79 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
-import { useToast } from '@/components/ui/use-toast';
+import { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { api } from '@/lib/apiClient';
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext({});
 
-export const AuthProvider = ({ children }) => {
-  const { toast } = useToast();
-
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [recoveryMode, setRecoveryMode] = useState(false);
 
-  const getProfile = useCallback(async (user) => {
-    if (!user) return null;
-
+  const loadUser = async () => {
     try {
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`role`)
-        .eq('id', user.id)
-        .single();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-      
-      return { ...user, role: data?.role || 'member' };
-    } catch (error) {
-      console.error('Error fetching profile:', error.message);
-      return { ...user, role: 'member' };
+      const u = await api('/auth/me');
+      setUser(u);
+    } catch (e) {
+      setUser(null);
+    } finally {
+      setInitialLoadComplete(true);
+      setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    let isMounted = true;
-    let timeoutId = null;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('recovery') === 'true') setRecoveryMode(true);
+    loadUser();
+  }, []);
 
-    const getInitialSession = async () => {
-      // Iniciar el temporizador de seguridad
-      timeoutId = setTimeout(() => {
-        if (isMounted && !initialLoadComplete) {
-          console.warn("Auth loading timed out. Forcing UI to render.");
-          setLoading(false);
-          setInitialLoadComplete(true);
-        }
-      }, 10000); // 10 segundos de tiempo de espera
+  // Compatibilidad con codigo heredado (shpe Supabase-like: { data, error })
+  // Actualizacion: la nueva implementación NestJS devuelve directamente el perfil.
+  // Envolvemos en try/catch y devolvemos { data, error } para minimizar cambios en los componentes.
 
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (isMounted) {
-          setSession(session);
-          if (session?.user) {
-            const profile = await getProfile(session.user);
-            if (isMounted) setUser(profile);
-          } else {
-            if (isMounted) setUser(null);
-          }
-        }
-      } catch (error) {
-        console.error("Error in getInitialSession:", error);
-      } finally {
-        if (isMounted) {
-          clearTimeout(timeoutId); // Limpiar el temporizador si todo va bien
-          setLoading(false);
-          setInitialLoadComplete(true);
-        }
-      }
-    };
-
-    getInitialSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (isMounted) {
-          setSession(session);
-          if (event === 'PASSWORD_RECOVERY') {
-            setRecoveryMode(true);
-          }
-          if (session?.user) {
-            const profile = await getProfile(session.user);
-            if (isMounted) setUser(profile);
-          } else {
-            if (isMounted) setUser(null);
-          }
-        }
-      }
-    );
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-      subscription.unsubscribe();
-    };
-  }, [getProfile]);
-
-  const signUp = useCallback(async (email, password, metadata) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata
-      }
-    });
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Sign up Failed",
-        description: error.message || "Something went wrong",
-      });
+  const wrap = async (fn) => {
+    try {
+      const r = await fn();
+      return { data: r, error: null };
+    } catch (e) {
+      return { data: null, error: { message: e.message || 'error' } };
     }
+  };
 
-    return { data, error };
-  }, [toast]);
+  const signIn = async (email, password) => {
+    const data = await wrap(() => api('/auth/sign-in', { method: 'POST', body: { email, password } }));
+    if (data.data) setUser(data.data.profile);
+    return data;
+  };
 
-  const signIn = useCallback(async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const signUp = async (form) => {
+    const data = await wrap(() => api('/auth/sign-up', { method: 'POST', body: form }));
+    if (data.data) setUser(data.data.profile);
+    return data;
+  };
 
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Sign in Failed",
-        description: error.message || "Something went wrong",
-      });
-    }
+  const signOut = async () => {
+    await api('/auth/sign-out', { method: 'POST' });
+    setUser(null);
+  };
 
-    return { data, error };
-  }, [toast]);
+  const resetPassword = async (email) => {
+    return api('/auth/password-reset/request', { method: 'POST', body: { email } });
+  };
 
-  const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
+  const updatePassword = async (password) => {
+    await api('/auth/password', { method: 'POST', body: { password } });
+    setRecoveryMode(false);
+  };
 
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Sign out Failed",
-        description: error.message || "Something went wrong",
-      });
-    }
-
-    return { error };
-  }, [toast]);
-
-  const resetPassword = useCallback(async (email) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
-    });
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "No se pudo enviar el email de recuperación",
-      });
-    }
-
-    return { error };
-  }, [toast]);
-
-  const updatePassword = useCallback(async (newPassword) => {
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "No se pudo actualizar la contraseña",
-      });
-    } else {
-      setRecoveryMode(false);
-      toast({
-        title: "Contraseña actualizada",
-        description: "Tu contraseña fue actualizada correctamente. Ya podés iniciar sesión.",
-      });
-    }
-
-    return { error };
-  }, [toast]);
-
-  const value = useMemo(() => ({
-    user,
-    session,
-    loading,
-    initialLoadComplete,
-    recoveryMode,
-    signUp,
-    signIn,
-    signOut,
-    resetPassword,
-    updatePassword,
-  }), [user, session, loading, initialLoadComplete, recoveryMode, signUp, signIn, signOut, resetPassword, updatePassword]);
+  const value = useMemo(
+    () => ({ user, loading, initialLoadComplete, recoveryMode, signIn, signUp, signOut, resetPassword, updatePassword }),
+    [user, loading, initialLoadComplete, recoveryMode],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+}
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export function useAuth() {
+  return useContext(AuthContext);
+}

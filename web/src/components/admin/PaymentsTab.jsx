@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Search, Trash2, Download } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { api } from '@/lib/apiClient';
 
 const PaymentsTab = ({ payments, loadData }) => {
   const { toast } = useToast();
@@ -16,12 +16,12 @@ const PaymentsTab = ({ payments, loadData }) => {
 
   const deletePayment = async (paymentId) => {
     setIsDeleting(true);
-    const { error } = await supabase.from('payments').delete().eq('id', paymentId);
-    if (error) {
-      toast({ title: "Error", description: "No se pudo eliminar el pago.", variant: "destructive" });
-    } else {
+    try {
+      await api(`/payments/${paymentId}`, { method: 'DELETE' });
       toast({ title: "Pago eliminado", description: "El registro del pago ha sido eliminado." });
       loadData();
+    } catch (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     }
     setIsDeleting(false);
   };
@@ -34,7 +34,7 @@ const PaymentsTab = ({ payments, loadData }) => {
     const monthName = now.toLocaleString('es-AR', { month: 'long' });
 
     const monthlyPayments = payments.filter(p => {
-      const paymentDate = new Date(p.payment_date);
+      const paymentDate = new Date(p.paymentDate);
       return paymentDate.getFullYear() === year && paymentDate.getMonth() === month;
     });
 
@@ -49,18 +49,18 @@ const PaymentsTab = ({ payments, loadData }) => {
 
     monthlyPayments.forEach(payment => {
       const paymentData = [
-        new Date(payment.payment_date).toLocaleDateString('es-AR'),
-        payment.profiles?.name || 'Miembro desconocido',
-        payment.plan.replace('_', ' '),
-        `$${Number(payment.amount).toLocaleString('es-AR')}`
+        new Date(payment.paymentDate).toLocaleDateString('es-AR'),
+        payment.memberName || payment.memberId || 'Miembro desconocido',
+        (payment.plan || '').replace('_', ' '),
+        `$${Number(payment.amount || 0).toLocaleString('es-AR')}`
       ];
       tableRows.push(paymentData);
-      totalAmount += Number(payment.amount);
+      totalAmount += Number(payment.amount || 0);
     });
 
     doc.setFontSize(18);
     doc.text(`Reporte de Pagos - ${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`, 14, 22);
-    
+
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
@@ -78,12 +78,10 @@ const PaymentsTab = ({ payments, loadData }) => {
   };
 
   const filteredPayments = useMemo(() => {
-    if (!searchTerm) {
-      return payments.slice().reverse();
-    }
+    if (!searchTerm) return payments.slice().reverse();
     const lowercasedTerm = searchTerm.toLowerCase();
     return payments.filter(p =>
-      p.profiles?.name?.toLowerCase().includes(lowercasedTerm)
+      (p.memberName || p.memberId || '').toLowerCase().includes(lowercasedTerm)
     ).slice().reverse();
   }, [payments, searchTerm]);
 
@@ -95,16 +93,10 @@ const PaymentsTab = ({ payments, loadData }) => {
           <div className="flex items-center gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <Input
-                placeholder="Buscar por nombre..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full sm:w-64"
-              />
+              <Input placeholder="Buscar por nombre..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 w-full sm:w-64" />
             </div>
             <Button onClick={exportToPDF} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
-              <Download className="w-4 h-4 mr-2" />
-              Exportar Reporte Mensual
+              <Download className="w-4 h-4 mr-2" />Exportar Reporte Mensual
             </Button>
           </div>
         </div>
@@ -118,12 +110,12 @@ const PaymentsTab = ({ payments, loadData }) => {
               <div key={payment.id} className="border-2 border-gray-200 p-4 rounded-lg">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="font-bold">{payment.profiles?.name || 'Miembro desconocido'}</h3>
-                    <p className="text-sm text-gray-600 capitalize">{payment.plan.replace('_', ' ')}</p>
-                    <p className="text-sm">{new Date(payment.payment_date).toLocaleDateString('es-AR')}</p>
+                    <h3 className="font-bold">{payment.memberName || payment.memberId || 'Miembro desconocido'}</h3>
+                    <p className="text-sm text-gray-600 capitalize">{(payment.plan || '').replace('_', ' ')}</p>
+                    <p className="text-sm">{new Date(payment.paymentDate).toLocaleDateString('es-AR')}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <p className="text-2xl font-bold text-green-600">${Number(payment.amount).toLocaleString('es-AR')}</p>
+                    <p className="text-2xl font-bold text-green-600">${Number(payment.amount || 0).toLocaleString('es-AR')}</p>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button size="sm" variant="destructive"><Trash2 className="w-4 h-4" /></Button>
@@ -132,7 +124,7 @@ const PaymentsTab = ({ payments, loadData }) => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>¿Eliminar este pago?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Esta acción no se puede deshacer. Se eliminará el registro del pago de ${Number(payment.amount).toLocaleString('es-AR')} para {payment.profiles?.name || 'este miembro'}.
+                            Esta acción no se puede deshacer. Se eliminará el registro del pago de ${Number(payment.amount || 0).toLocaleString('es-AR')} para {payment.memberName || 'este miembro'}.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
