@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { SignInDto, SignUpDto, ResetPasswordRequestDto, UpdatePasswordDto } from './dto';
+import { SignInDto, SignUpDto, ResetPasswordRequestDto, UpdatePasswordDto, ConfirmResetPasswordDto } from './dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtRefreshGuard } from './jwt-refresh.guard';
 
@@ -68,6 +68,11 @@ export class AuthController {
   @Post('password-reset/request')
   async requestReset(@Body() dto: ResetPasswordRequestDto) {
     return this.authService.requestPasswordReset(dto);
+  }
+
+  @Post('password-reset/confirm')
+  async confirmReset(@Body() dto: ConfirmResetPasswordDto) {
+    return this.authService.confirmPasswordReset(dto.token, dto.password);
   }
 
   @UseGuards(JwtAuthGuard)

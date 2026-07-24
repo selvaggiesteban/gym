@@ -61,13 +61,17 @@ export function AuthProvider({ children }) {
     return api('/auth/password-reset/request', { method: 'POST', body: { email } });
   };
 
+  const confirmPasswordReset = async (token, password) => {
+    return api('/auth/password-reset/confirm', { method: 'POST', body: { token, password } });
+  };
+
   const updatePassword = async (password) => {
     await api('/auth/password', { method: 'POST', body: { password } });
     setRecoveryMode(false);
   };
 
   const value = useMemo(
-    () => ({ user, loading, initialLoadComplete, recoveryMode, signIn, signUp, signOut, resetPassword, updatePassword }),
+    () => ({ user, loading, initialLoadComplete, recoveryMode, signIn, signUp, signOut, resetPassword, confirmPasswordReset, updatePassword }),
     [user, loading, initialLoadComplete, recoveryMode],
   );
 

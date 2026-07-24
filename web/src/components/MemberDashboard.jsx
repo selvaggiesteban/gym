@@ -2,11 +2,13 @@ import React, { useState, useCallback } from 'react';
 import { Helmet } from '@/lib/helmet';
 import { motion } from 'motion/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { LogOut, CreditCard, Calendar, Clock, AlertTriangle, Hash, Users, Dumbbell, ClipboardList } from 'lucide-react';
+import { LogOut, CreditCard, Calendar, Clock, AlertTriangle, Hash, Users, Dumbbell, ClipboardList, Plus } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/apiClient';
@@ -113,6 +115,42 @@ export default function MemberDashboard() {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     },
   });
+
+  const [isLogOpen, setLogOpen] = useState(false);
+  const [logForm, setLogForm] = useState({ assignmentId: '', exerciseId: '', completedReps: '', weight: '', durationSeconds: '', notes: '' });
+
+  const logWorkoutMutation = useMutation({
+    mutationFn: (data) => api('/workout-logs', { method: 'POST', body: data }),
+    onSuccess: () => {
+      toast({ title: "Entrenamiento registrado", description: "Tu progreso ha sido guardado." });
+      setLogOpen(false);
+      setLogForm({ assignmentId: '', exerciseId: '', completedReps: '', weight: '', durationSeconds: '', notes: '' });
+      queryClient.invalidateQueries({ queryKey: ['workout-logs'] });
+    },
+    onError: (err) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const handleLogWorkout = () => {
+    if (!logForm.assignmentId || !logForm.exerciseId) {
+      toast({ title: "Error", description: "Selecciona una rutina y un ejercicio", variant: "destructive" });
+      return;
+    }
+    const payload = {
+      assignmentId: logForm.assignmentId,
+      routineId: routineAssignments.find(a => a.id === logForm.assignmentId)?.routineId || '',
+      exerciseId: logForm.exerciseId,
+      completedReps: logForm.completedReps ? parseInt(logForm.completedReps) : null,
+      weight: logForm.weight ? parseFloat(logForm.weight) : null,
+      durationSeconds: logForm.durationSeconds ? parseInt(logForm.durationSeconds) * 60 : null,
+      notes: logForm.notes || null,
+    };
+    logWorkoutMutation.mutate(payload);
+  };
+
+  const selectedAssignment = routineAssignments.find(a => a.id === logForm.assignmentId);
+  const availableExercises = selectedAssignment?.routine?.exercises || [];
 
   if (memberQuery.isLoading) {
     return (
@@ -303,7 +341,14 @@ export default function MemberDashboard() {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
               <Card className="neu-card">
-                <CardHeader><CardTitle className="flex items-center gap-2"><Dumbbell className="w-5 h-5" />Historial de Entrenamiento</CardTitle></CardHeader>
+                <CardHeader className="flex justify-between items-center">
+                  <CardTitle className="flex items-center gap-2"><Dumbbell className="w-5 h-5" />Historial de Entrenamiento</CardTitle>
+                  {routineAssignments.length > 0 && (
+                    <Button onClick={() => setLogOpen(true)} className="neu-btn-primary text-sm">
+                      <Plus className="w-4 h-4 mr-1" />Registrar
+                    </Button>
+                  )}
+                </CardHeader>
                 <CardContent>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
                     {workoutLogs.length === 0 ? (
@@ -352,6 +397,64 @@ export default function MemberDashboard() {
           </div>
         </div>
       </div>
+
+      <Dialog open={isLogOpen} onOpenChange={setLogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Registrar Entrenamiento</DialogTitle>
+            <DialogDescription>Selecciona la rutina, el ejercicio y registra tu progreso.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label>Rutina Asignada</Label>
+              <Select value={logForm.assignmentId} onValueChange={(v) => setLogForm(prev => ({ ...prev, assignmentId: v, exerciseId: '' }))}>
+                <SelectTrigger><SelectValue placeholder="Seleccionar rutina" /></SelectTrigger>
+                <SelectContent>
+                  {routineAssignments.map(a => (
+                    <SelectItem key={a.id} value={a.id}>{a.routine?.name || 'Rutina'}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {availableExercises.length > 0 && (
+              <div>
+                <Label>Ejercicio</Label>
+                <Select value={logForm.exerciseId} onValueChange={(v) => setLogForm(prev => ({ ...prev, exerciseId: v }))}>
+                  <SelectTrigger><SelectValue placeholder="Seleccionar ejercicio" /></SelectTrigger>
+                  <SelectContent>
+                    {availableExercises.map(ex => (
+                      <SelectItem key={ex.exerciseId} value={ex.exerciseId}>{ex.exerciseName || ex.exerciseId} ({ex.sets}x{ex.reps})</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="reps">Repeticiones</Label>
+                <Input id="reps" type="number" value={logForm.completedReps} onChange={(e) => setLogForm(prev => ({ ...prev, completedReps: e.target.value }))} placeholder="12" />
+              </div>
+              <div>
+                <Label htmlFor="weight">Peso (kg)</Label>
+                <Input id="weight" type="number" step="0.5" value={logForm.weight} onChange={(e) => setLogForm(prev => ({ ...prev, weight: e.target.value }))} placeholder="20" />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="duration">Duracion (minutos)</Label>
+              <Input id="duration" type="number" value={logForm.durationSeconds} onChange={(e) => setLogForm(prev => ({ ...prev, durationSeconds: e.target.value }))} placeholder="45" />
+            </div>
+            <div>
+              <Label htmlFor="logNotes">Notas (opcional)</Label>
+              <Input id="logNotes" value={logForm.notes} onChange={(e) => setLogForm(prev => ({ ...prev, notes: e.target.value }))} placeholder="Como me senti..." />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleLogWorkout} disabled={logWorkoutMutation.isPending} className="neu-btn-primary">
+              {logWorkoutMutation.isPending ? 'Guardando...' : 'Registrar Entrenamiento'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

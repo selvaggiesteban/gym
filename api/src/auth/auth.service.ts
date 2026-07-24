@@ -3,11 +3,13 @@ import {
   ConflictException,
   UnauthorizedException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
 import { SignInDto, SignUpDto, UpdatePasswordDto, ResetPasswordRequestDto } from './dto';
 
 const DEFAULT_MEMBER_STATUS = 'expired';
@@ -18,6 +20,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private mail: MailService,
   ) {}
 
   async signUp(dto: SignUpDto) {
@@ -63,11 +66,29 @@ export class AuthService {
   async requestPasswordReset(dto: ResetPasswordRequestDto) {
     const profile = await this.prisma.client.profile.findUnique({ where: { email: dto.email } });
     if (!profile) return { ok: true };
-    const reset = await this.jwt.signAsync(
+    const resetToken = await this.jwt.signAsync(
       { sub: profile.id, email: profile.email },
-      { expiresIn: '15m' as any },
+      { expiresIn: '15m' as any, secret: this.config.getOrThrow('JWT_REFRESH_SECRET') },
     );
-    return { resetToken: reset, ok: true };
+    const frontendUrl = this.config.get<string>('CORS_ORIGIN', 'http://localhost:5173');
+    await this.mail.sendPasswordReset(profile.email, resetToken, frontendUrl);
+    return { ok: true };
+  }
+
+  async confirmPasswordReset(token: string, newPassword: string) {
+    try {
+      const payload = this.jwt.verify<{ sub: string; email: string }>(token, {
+        secret: this.config.getOrThrow('JWT_REFRESH_SECRET'),
+      });
+      const profile = await this.prisma.client.profile.findUnique({ where: { id: payload.sub } });
+      if (!profile) throw new NotFoundException('Usuario no encontrado');
+      const hash = await argon2.hash(newPassword, { type: argon2.argon2id });
+      await this.prisma.client.profile.update({ where: { id: payload.sub }, data: { passwordHash: hash } });
+      return { ok: true };
+    } catch (e) {
+      if (e instanceof NotFoundException) throw e;
+      throw new BadRequestException('Token invalido o expirado');
+    }
   }
 
   async updatePassword(userId: string, dto: UpdatePasswordDto) {
