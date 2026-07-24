@@ -38,7 +38,7 @@ export default function AdminDashboard() {
   const paymentsData = paymentsQuery.data || [];
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-[var(--color-neu-bg)] p-6">
       <Helmet title="GYM - Admin" />
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="max-w-7xl mx-auto">
         <header className="mb-8 flex items-center justify-between">
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-black">GYM · Admin</h1>
             <p className="text-gray-600">Panel de administración</p>
           </div>
-          <Button onClick={signOut} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+          <Button onClick={signOut} variant="outline" className="neu-btn">
             <LogOut className="w-4 h-4 mr-2" />Cerrar Sesión
           </Button>
         </header>

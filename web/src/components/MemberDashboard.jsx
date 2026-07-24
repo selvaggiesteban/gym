@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Helmet } from '@/lib/helmet';
 import { motion } from 'motion/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { LogOut, CreditCard, Calendar, Clock, AlertTriangle, Hash, Users } from 'lucide-react';
+import { LogOut, CreditCard, Calendar, Clock, AlertTriangle, Hash, Users, Dumbbell, ClipboardList } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,10 +41,24 @@ export default function MemberDashboard() {
     queryFn: () => api('/notices'),
   });
 
+  const workoutLogsQuery = useQuery({
+    queryKey: ['workout-logs', user?.id],
+    queryFn: () => api('/workout-logs/mine'),
+    enabled: !!user,
+  });
+
+  const routineAssignmentsQuery = useQuery({
+    queryKey: ['routine-assignments', user?.id],
+    queryFn: () => api('/routine-assignments/mine'),
+    enabled: !!user,
+  });
+
   const memberData = memberQuery.data;
   const payments = (paymentsQuery.data || []).filter(p => p.memberId === user?.id);
   const rawSchedule = scheduleQuery.data || [];
   const notices = noticesQuery.data || [];
+  const workoutLogs = workoutLogsQuery.data || [];
+  const routineAssignments = routineAssignmentsQuery.data || [];
 
   const getPaymentStatus = () => {
     if (!memberData?.expiryDate) return { status: 'expired', color: 'bg-red-500', text: 'PAGO VENCIDO' };
@@ -131,14 +145,14 @@ export default function MemberDashboard() {
         <meta name="description" content="Panel de control para miembros del gimnasio" />
       </Helmet>
 
-      <div className="min-h-screen bg-white p-4">
+      <div className="min-h-screen bg-[var(--color-neu-bg)] p-4">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-4xl font-bold text-black">GYM</h1>
               <p className="text-gray-600">Bienvenido, {memberData?.name}</p>
             </div>
-            <Button onClick={signOut} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+            <Button onClick={signOut} variant="outline" className="neu-btn">
               <LogOut className="w-4 h-4 mr-2" />
               Cerrar Sesión
             </Button>
@@ -146,7 +160,7 @@ export default function MemberDashboard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-              <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+              <Card className="neu-card">
                 <CardHeader><CardTitle className="flex items-center gap-2"><CreditCard className="w-5 h-5" />Estado de Pago</CardTitle></CardHeader>
                 <CardContent>
                   <div className={`${paymentStatus.color} text-white p-4 rounded-lg text-center font-bold mb-4`}>{paymentStatus.text}</div>
@@ -165,7 +179,7 @@ export default function MemberDashboard() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 0 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
-              <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+              <Card className="neu-card">
                 <CardHeader><CardTitle className="flex items-center gap-2"><Hash className="w-5 h-5" />Marcar Asistencia</CardTitle></CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -176,7 +190,7 @@ export default function MemberDashboard() {
                         <Input id="code" type="text" placeholder="Tu código de 3 dígitos" value={attendanceCode} onChange={(e) => setAttendanceCode(e.target.value)} className="pl-10 font-mono text-center text-lg" maxLength={3} />
                       </div>
                     </div>
-                    <Button onClick={() => attendanceMutation.mutate(attendanceCode)} disabled={attendanceMutation.isPending} className="w-full bg-black text-white hover:bg-gray-800 font-bold border-2 border-black shadow-[2px_2px_0px_0px_#000000]">
+                    <Button onClick={() => attendanceMutation.mutate(attendanceCode)} disabled={attendanceMutation.isPending} className="w-full neu-btn-primary">
                       {attendanceMutation.isPending ? 'Verificando...' : 'MARCAR ASISTENCIA'}
                     </Button>
                   </div>
@@ -185,7 +199,7 @@ export default function MemberDashboard() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-              <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+              <Card className="neu-card">
                 <CardHeader><CardTitle>Historial de Pagos</CardTitle></CardHeader>
                 <CardContent>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
@@ -208,7 +222,7 @@ export default function MemberDashboard() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-3">
-              <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+              <Card className="neu-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2"><Calendar className="w-5 h-5" />Calendario Semanal</CardTitle>
                   <CardDescription>Reserva tu lugar en las clases. Solo miembros activos pueden reservar.</CardDescription>
@@ -254,7 +268,69 @@ export default function MemberDashboard() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="lg:col-span-3">
-              <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+              <Card className="neu-card">
+                <CardHeader><CardTitle className="flex items-center gap-2"><ClipboardList className="w-5 h-5" />Mis Rutinas Asignadas</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {routineAssignments.length === 0 ? (
+                      <p className="text-gray-500 text-center py-4">No tenés rutinas asignadas</p>
+                    ) : (
+                      routineAssignments.map(assignment => (
+                        <div key={assignment.id} className="border-2 border-black p-4 rounded-lg">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-bold">{assignment.routine?.name || 'Rutina'}</h4>
+                            {assignment.dueDate && (
+                              <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">Vence: {new Date(assignment.dueDate).toLocaleDateString('es-AR')}</span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 mb-2">Entrenador: {assignment.trainer?.profile?.name || 'N/A'}</p>
+                          {assignment.routine?.exercises?.length > 0 && (
+                            <div className="space-y-1">
+                              {assignment.routine.exercises.slice(0, 5).map(ex => (
+                                <p key={ex.id} className="text-sm">• {ex.exerciseName || ex.exerciseId} — {ex.sets}x{ex.reps}</p>
+                              ))}
+                              {assignment.routine.exercises.length > 5 && <p className="text-xs text-gray-400">+{assignment.routine.exercises.length - 5} ejercicios más</p>}
+                            </div>
+                          )}
+                          {assignment.notes && <p className="text-xs text-gray-600 mt-2 italic">{assignment.notes}</p>}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
+              <Card className="neu-card">
+                <CardHeader><CardTitle className="flex items-center gap-2"><Dumbbell className="w-5 h-5" />Historial de Entrenamiento</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {workoutLogs.length === 0 ? (
+                      <p className="text-gray-500 text-center py-4">No hay registros de entrenamiento</p>
+                    ) : (
+                      workoutLogs.slice(0, 10).map(log => (
+                        <div key={log.id} className="border border-gray-200 p-3 rounded-lg">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">{log.exerciseId}</span>
+                            <span className="text-xs text-gray-500">{new Date(log.date).toLocaleDateString('es-AR')}</span>
+                          </div>
+                          <div className="flex gap-4 text-sm text-gray-600 mt-1">
+                            {log.completedReps != null && <span>Reps: {log.completedReps}</span>}
+                            {log.weight != null && <span>Peso: {log.weight}kg</span>}
+                            {log.durationSeconds != null && <span>Duración: {Math.round(log.durationSeconds / 60)}min</span>}
+                          </div>
+                          {log.notes && <p className="text-xs text-gray-500 mt-1 italic">{log.notes}</p>}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
+              <Card className="neu-card">
                 <CardHeader><CardTitle>Avisos Importantes</CardTitle></CardHeader>
                 <CardContent>
                   <div className="space-y-3 max-h-64 overflow-y-auto">

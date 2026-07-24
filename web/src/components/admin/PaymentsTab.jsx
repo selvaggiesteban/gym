@@ -86,7 +86,7 @@ const PaymentsTab = ({ payments, loadData }) => {
   }, [payments, searchTerm]);
 
   return (
-    <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+    <Card className="neu-card">
       <CardHeader>
         <div className="flex justify-between items-center flex-wrap gap-4">
           <CardTitle>Historial de Pagos</CardTitle>
@@ -95,7 +95,7 @@ const PaymentsTab = ({ payments, loadData }) => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input placeholder="Buscar por nombre..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 w-full sm:w-64" />
             </div>
-            <Button onClick={exportToPDF} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+            <Button onClick={exportToPDF} variant="outline" className="neu-btn">
               <Download className="w-4 h-4 mr-2" />Exportar Reporte Mensual
             </Button>
           </div>

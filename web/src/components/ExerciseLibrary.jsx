@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Dumbbell, Filter } from 'lucide-react';
 
-const EXERCISES_JSON_URL = 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/dataset/exercises.json';
+const EXERCISES_JSON_URL = 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/data/exercises.json';
 const CACHE_KEY = 'gym_exercises_cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
@@ -90,7 +90,7 @@ export default function ExerciseLibrary({ onSelect, selectedIds = [] }) {
 
   if (isLoading) {
     return (
-      <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+      <Card className="neu-card">
         <CardContent className="p-8 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
           <p className="text-gray-500">Cargando biblioteca de ejercicios...</p>
@@ -100,7 +100,7 @@ export default function ExerciseLibrary({ onSelect, selectedIds = [] }) {
   }
 
   return (
-    <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+    <Card className="neu-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2"><Dumbbell className="w-5 h-5" />Biblioteca de Ejercicios ({filtered.length})</CardTitle>
       </CardHeader>

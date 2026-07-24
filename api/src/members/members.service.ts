@@ -22,7 +22,8 @@ export class MembersService {
   }
 
   async get(id: string) {
-    const m = await this.prisma.client.member.findUnique({ where: { id }, include: { profile: true } });
+    let m = await this.prisma.client.member.findUnique({ where: { id }, include: { profile: true } });
+    if (!m) m = await this.prisma.client.member.findUnique({ where: { profileId: id }, include: { profile: true } });
     if (!m) throw new NotFoundException('Miembro no encontrado');
     return m;
   }

@@ -38,7 +38,7 @@ const NoticesTab = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+      <Card className="neu-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Plus className="w-5 h-5" />Crear Nuevo Aviso</CardTitle>
         </CardHeader>
@@ -47,13 +47,13 @@ const NoticesTab = () => {
             <div><Label htmlFor="noticeTitle">Título</Label><Input id="noticeTitle" value={newNotice.title} onChange={(e) => setNewNotice(prev => ({ ...prev, title: e.target.value }))} placeholder="Título del aviso" /></div>
             <div><Label htmlFor="noticeMessage">Mensaje</Label><textarea id="noticeMessage" value={newNotice.message} onChange={(e) => setNewNotice(prev => ({ ...prev, message: e.target.value }))} placeholder="Contenido del aviso" className="w-full h-24 p-3 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" /></div>
           </div>
-          <Button onClick={addNotice} disabled={createMutation.isPending} className="mt-4 bg-black text-white hover:bg-gray-800">
+          <Button onClick={addNotice} disabled={createMutation.isPending} className="mt-4 bg-black text-white hover:bg-gray-800 neu-btn-primary">
             <Plus className="w-4 h-4 mr-2" />{createMutation.isPending ? 'Publicando...' : 'Publicar Aviso'}
           </Button>
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+      <Card className="neu-card">
         <CardHeader><CardTitle>Avisos Publicados</CardTitle></CardHeader>
         <CardContent>
           <div className="space-y-4 max-h-[50vh] overflow-y-auto">

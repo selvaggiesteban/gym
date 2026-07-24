@@ -10,7 +10,7 @@ const AttendanceTab = () => {
   });
 
   return (
-    <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+    <Card className="neu-card">
       <CardHeader>
         <CardTitle>Registro de Asistencia</CardTitle>
         <CardDescription>Asistencia diaria de miembros</CardDescription>

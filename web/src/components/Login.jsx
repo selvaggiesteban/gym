@@ -37,8 +37,8 @@ export default function Login() {
       const { error } = await signIn(formData.email, formData.password);
       if (!error) {
         toast({
-          title: "Â¡Bienvenido!",
-          description: "Has iniciado sesiÃ³n correctamente",
+          title: "Bienvenido!",
+          description: "Has iniciado sesion correctamente",
         });
       }
     } else {
@@ -62,7 +62,7 @@ export default function Login() {
 
       if (!error) {
         toast({
-          title: "Â¡Cuenta creada!",
+          title: "Cuenta creada!",
           description: "Tu cuenta ha sido creada exitosamente. Revisa tu email para confirmar.",
         });
         setIsLogin(true);
@@ -80,7 +80,7 @@ export default function Login() {
       setResetSent(true);
       toast({
         title: "Email enviado",
-        description: "Revisa tu casilla de correo para restablecer tu contraseÃ±a.",
+        description: "Revisa tu casilla de correo para restablecer tu contrasena.",
       });
     }
     setLoading(false);
@@ -91,7 +91,7 @@ export default function Login() {
     if (newPassword !== confirmPassword) {
       toast({
         title: "Error",
-        description: "Las contraseÃ±as no coinciden",
+        description: "Las contrasenas no coinciden",
         variant: "destructive",
       });
       return;
@@ -99,7 +99,7 @@ export default function Login() {
     if (newPassword.length < 8) {
       toast({
         title: "Error",
-        description: "La contraseÃ±a debe tener al menos 8 caracteres",
+        description: "La contrasena debe tener al menos 8 caracteres",
         variant: "destructive",
       });
       return;
@@ -128,40 +128,39 @@ export default function Login() {
     setConfirmPassword('');
   };
 
-  // Modo: Nueva contraseÃ±a (el usuario volviÃ³ del email de recovery)
   if (recoveryMode) {
     return (
       <>
         <Helmet>
-          <title>NÃ“MADES OCR - Nueva ContraseÃ±a</title>
-          <meta name="description" content="Establece tu nueva contraseÃ±a de NÃ“MADES OCR" />
+          <title>GYM - Nueva Contrasena</title>
+          <meta name="description" content="Establece tu nueva contrasena de GYM" />
         </Helmet>
         
-        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[var(--color-neu-bg)] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="w-full max-w-md"
           >
-            <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
+            <Card className="neu-card">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
+                <CardTitle className="text-3xl font-bold text-black">GYM</CardTitle>
                 <CardDescription className="text-gray-600">
-                  Establece tu nueva contraseÃ±a
+                  Establece tu nueva contrasena
                 </CardDescription>
               </CardHeader>
               
               <CardContent>
                 <form onSubmit={handleUpdatePassword} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="newPassword" className="text-black font-medium">Nueva contraseÃ±a</Label>
+                    <Label htmlFor="newPassword" className="text-black font-medium">Nueva contrasena</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="newPassword"
                         type={showNewPassword ? "text" : "password"}
-                        placeholder="Tu nueva contraseÃ±a"
+                        placeholder="Tu nueva contrasena"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="pl-10 pr-10"
@@ -178,13 +177,13 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-black font-medium">Confirmar contraseÃ±a</Label>
+                    <Label htmlFor="confirmPassword" className="text-black font-medium">Confirmar contrasena</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="confirmPassword"
                         type={showNewPassword ? "text" : "password"}
-                        placeholder="Repite tu nueva contraseÃ±a"
+                        placeholder="Repite tu nueva contrasena"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="pl-10"
@@ -195,10 +194,10 @@ export default function Login() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
+                    className="w-full neu-btn-primary"
                     disabled={loading}
                   >
-                    {loading ? 'Actualizando...' : 'ACTUALIZAR CONTRASEÃ‘A'}
+                    {loading ? 'Actualizando...' : 'ACTUALIZAR CONTRASENA'}
                   </Button>
                 </form>
 
@@ -218,27 +217,26 @@ export default function Login() {
     );
   }
 
-  // Modo: Enviar email de recuperaciÃ³n
   if (resetMode) {
     return (
       <>
         <Helmet>
-          <title>NÃ“MADES OCR - Restablecer ContraseÃ±a</title>
-          <meta name="description" content="Restablece tu contraseÃ±a de NÃ“MADES OCR" />
+          <title>GYM - Restablecer Contrasena</title>
+          <meta name="description" content="Restablece tu contrasena de GYM" />
         </Helmet>
         
-        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[var(--color-neu-bg)] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="w-full max-w-md"
           >
-            <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
+            <Card className="neu-card">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
+                <CardTitle className="text-3xl font-bold text-black">GYM</CardTitle>
                 <CardDescription className="text-gray-600">
-                  {resetSent ? 'Revisa tu email' : 'Restablece tu contraseÃ±a'}
+                  {resetSent ? 'Revisa tu email' : 'Restablece tu contrasena'}
                 </CardDescription>
               </CardHeader>
               
@@ -250,13 +248,13 @@ export default function Login() {
                         Te enviamos un email a <strong>{resetEmail}</strong>
                       </p>
                       <p className="text-green-600 text-sm mt-2">
-                        HacÃ© clic en el link del email para restablecer tu contraseÃ±a.
+                        Hace clic en el link del email para restablecer tu contrasena.
                       </p>
                     </div>
                     <Button 
                       onClick={resetAllForms}
                       variant="outline"
-                      className="w-full border-2 border-black hover:bg-black hover:text-white"
+                      className="w-full neu-btn"
                     >
                       Volver al login
                     </Button>
@@ -281,10 +279,10 @@ export default function Login() {
 
                     <Button 
                       type="submit" 
-                      className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
+                      className="w-full neu-btn-primary"
                       disabled={loading}
                     >
-                      {loading ? 'Enviando...' : 'ENVIAR LINK DE RECUPERACIÃ“N'}
+                      {loading ? 'Enviando...' : 'ENVIAR LINK DE RECUPERACION'}
                     </Button>
                   </form>
                 )}
@@ -305,26 +303,25 @@ export default function Login() {
     );
   }
 
-  // Modo: Login / Registro (default)
   return (
     <>
       <Helmet>
-        <title>NÃ“MADES OCR - Acceso al Sistema</title>
-        <meta name="description" content="Accede a tu cuenta de NÃ“MADES OCR para gestionar tu membresÃ­a del gimnasio" />
+        <title>GYM - Acceso al Sistema</title>
+        <meta name="description" content="Accede a tu cuenta de GYM para gestionar tu membresia del gimnasio" />
       </Helmet>
       
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[var(--color-neu-bg)] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <Card className="border-2 border-black shadow-[8px_8px_0px_0px_#000000]">
+          <Card className="neu-card">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-black">NÃ“MADES OCR</CardTitle>
+              <CardTitle className="text-3xl font-bold text-black">GYM</CardTitle>
               <CardDescription className="text-gray-600">
-                {isLogin ? 'Inicia sesiÃ³n en tu cuenta' : 'Crea tu cuenta nueva'}
+                {isLogin ? 'Inicia sesion en tu cuenta' : 'Crea tu cuenta nueva'}
               </CardDescription>
             </CardHeader>
             
@@ -357,7 +354,7 @@ export default function Login() {
                           id="whatsapp"
                           name="whatsapp"
                           type="tel"
-                          placeholder="Tu nÃºmero de WhatsApp"
+                          placeholder="Tu numero de WhatsApp"
                           value={formData.whatsapp}
                           onChange={handleChange}
                           className="pl-10"
@@ -402,14 +399,14 @@ export default function Login() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-black font-medium">ContraseÃ±a</Label>
+                  <Label htmlFor="password" className="text-black font-medium">Contrasena</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <Input
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Tu contraseÃ±a"
+                      placeholder="Tu contrasena"
                       value={formData.password}
                       onChange={handleChange}
                       className="pl-10 pr-10"
@@ -427,10 +424,10 @@ export default function Login() {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-black text-white hover:bg-gray-800 font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[2px_2px_0px_0px_#000000] transition-all"
+                  className="w-full neu-btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Procesando...' : (isLogin ? 'INICIAR SESIÃ“N' : 'CREAR CUENTA')}
+                  {loading ? 'Procesando...' : (isLogin ? 'INICIAR SESION' : 'CREAR CUENTA')}
                 </Button>
               </form>
 
@@ -442,7 +439,7 @@ export default function Login() {
                   }}
                   className="text-black hover:underline font-medium"
                 >
-                  {isLogin ? 'Â¿No tienes cuenta? Crear cuenta' : 'Â¿Ya tienes cuenta? Iniciar sesiÃ³n'}
+                  {isLogin ? 'No tienes cuenta? Crear cuenta' : 'Ya tienes cuenta? Iniciar sesion'}
                 </button>
               </div>
 
@@ -452,7 +449,7 @@ export default function Login() {
                     onClick={() => setResetMode(true)}
                     className="text-gray-600 hover:text-black text-sm"
                   >
-                    Â¿Olvidaste tu contraseÃ±a?
+                    Olvidaste tu contrasena?
                   </button>
                 </div>
               )}

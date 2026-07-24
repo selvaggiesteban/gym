@@ -14,7 +14,7 @@ const AdminOverview = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+          <Card key={i} className="neu-card">
             <CardContent className="p-6"><div className="animate-pulse h-8 bg-gray-200 rounded w-16"></div></CardContent>
           </Card>
         ))}
@@ -33,7 +33,7 @@ const AdminOverview = () => {
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((s) => (
-          <Card key={s.label} className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+          <Card key={s.label} className="neu-card">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>

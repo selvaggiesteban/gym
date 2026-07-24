@@ -16,4 +16,10 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     await this.client.$disconnect();
     this.logger.log('Prisma disconnected from MySQL');
   }
+
+  async resolveTrainerId(profileId: string): Promise<string> {
+    const trainer = await this.client.trainer.findUnique({ where: { profileId } });
+    if (!trainer) throw new Error('Perfil no es entrenador');
+    return trainer.id;
+  }
 }

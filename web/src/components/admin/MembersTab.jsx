@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Plus, Archive, CreditCard, Upload, Info, Filter, Search, RefreshCw, Mail, Phone, Cake, CalendarDays, Barcode, CalendarCheck, CalendarX, Eye, EyeOff } from 'lucide-react';
+import { Plus, Archive, CreditCard, Upload, Info, Filter, Search, RefreshCw, Mail, Phone, Cake, CalendarDays, Barcode, CalendarCheck, CalendarX, Eye, EyeOff, Pencil } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 
 const MembersTab = ({ members, loadData }) => {
@@ -30,6 +30,9 @@ const MembersTab = ({ members, loadData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showArchived, setShowArchived] = useState(false);
   const fileInputRef = React.useRef(null);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [editMember, setEditMember] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', whatsapp: '', birthDate: '' });
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -131,6 +134,35 @@ const MembersTab = ({ members, loadData }) => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const openEditDialog = (member) => {
+    setEditMember(member);
+    setEditForm({
+      name: member.name || '',
+      whatsapp: member.whatsapp || '',
+      birthDate: member.birthDate ? new Date(member.birthDate).toISOString().split('T')[0] : '',
+    });
+    setEditOpen(true);
+  };
+
+  const saveEdit = async () => {
+    if (!editMember) return;
+    setIsSubmitting(true);
+    try {
+      await api(`/members/${editMember.id}`, {
+        method: 'PUT',
+        body: editForm,
+      });
+      toast({ title: 'Miembro actualizado', description: `${editForm.name} ha sido actualizado.` });
+      setEditOpen(false);
+      setEditMember(null);
+      loadData();
+    } catch (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const archiveMember = async (memberId, memberName) => {
     setIsSubmitting(true);
     try {
@@ -212,7 +244,7 @@ const MembersTab = ({ members, loadData }) => {
       <div className="flex flex-wrap gap-2">
         <Dialog open={isCreateMemberOpen} onOpenChange={setCreateMemberOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-black text-white hover:bg-gray-800 shadow-[2px_2px_0px_0px_#000000]"><Plus className="w-4 h-4 mr-2" />Crear Nuevo Miembro</Button>
+            <Button className="bg-black text-white hover:bg-gray-800 neu-btn-primary"><Plus className="w-4 h-4 mr-2" />Crear Nuevo Miembro</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Crear Nuevo Miembro</DialogTitle></DialogHeader>
@@ -252,17 +284,17 @@ const MembersTab = ({ members, loadData }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleCreateSingleMember} disabled={isSubmitting || !isFormValid} className="bg-black text-white disabled:opacity-50 disabled:cursor-not-allowed">
+              <Button onClick={handleCreateSingleMember} disabled={isSubmitting || !isFormValid} className="bg-black text-white disabled:opacity-50 disabled:cursor-not-allowed neu-btn-primary">
                 {isSubmitting ? 'Creando...' : 'Crear Miembro'}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button onClick={() => fileInputRef.current?.click()} disabled={isImporting} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+        <Button onClick={() => fileInputRef.current?.click()} disabled={isImporting} variant="outline" className="neu-btn">
           <Upload className="w-4 h-4 mr-2" />{isImporting ? "Importando..." : "Importar Miembros (CSV)"}
         </Button>
         <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".csv" />
-        <Button onClick={syncUsers} disabled={isSyncing} variant="outline" className="border-2 border-black hover:bg-black hover:text-white">
+        <Button onClick={syncUsers} disabled={isSyncing} variant="outline" className="neu-btn">
           <RefreshCw className={`w-4 h-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />{isSyncing ? "Sincronizando..." : "Sincronizar Miembros"}
         </Button>
       </div>
@@ -283,7 +315,7 @@ const MembersTab = ({ members, loadData }) => {
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+      <Card className="neu-card">
         <CardHeader>
           <div className="flex justify-between items-center flex-wrap gap-4">
             <CardTitle>Lista de Miembros ({filteredMembers.length})</CardTitle>
@@ -294,11 +326,11 @@ const MembersTab = ({ members, loadData }) => {
               </div>
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-gray-500" />
-                <Button size="sm" variant={filter === 'all' ? 'default' : 'outline'} onClick={() => setFilter('all')} className="border-2 border-black">Todos</Button>
-                <Button size="sm" variant={filter === 'active' ? 'default' : 'outline'} onClick={() => setFilter('active')} className="border-2 border-black">Activos</Button>
-                <Button size="sm" variant={filter === 'expired' ? 'default' : 'outline'} onClick={() => setFilter('expired')} className="border-2 border-black">Vencidos</Button>
+                <Button size="sm" variant={filter === 'all' ? 'default' : 'outline'} onClick={() => setFilter('all')} className="neu-inset">Todos</Button>
+                <Button size="sm" variant={filter === 'active' ? 'default' : 'outline'} onClick={() => setFilter('active')} className="neu-inset">Activos</Button>
+                <Button size="sm" variant={filter === 'expired' ? 'default' : 'outline'} onClick={() => setFilter('expired')} className="neu-inset">Vencidos</Button>
               </div>
-              <Button size="sm" variant={showArchived ? 'default' : 'outline'} onClick={() => setShowArchived(!showArchived)} className="border-2 border-black">
+              <Button size="sm" variant={showArchived ? 'default' : 'outline'} onClick={() => setShowArchived(!showArchived)} className="neu-inset">
                 {showArchived ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}{showArchived ? 'Ocultar archivados' : 'Mostrar archivados'}
               </Button>
             </div>
@@ -329,6 +361,9 @@ const MembersTab = ({ members, loadData }) => {
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      <Button onClick={() => openEditDialog(member)} size="sm" variant="outline" className="border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white" disabled={isArchived}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
                       <Dialog open={isPaymentDialogOpen && selectedMember?.id === member.id} onOpenChange={(open) => { if(!open) setSelectedMember(null); setPaymentDialogOpen(open); }}>
                         <DialogTrigger asChild>
                           <Button onClick={() => { setSelectedMember(member); setPaymentData({ plan: '', paymentDate: new Date().toISOString().split('T')[0] }); setPaymentDialogOpen(true); }} size="sm" className="bg-green-600 hover:bg-green-700 text-white" disabled={isArchived}>
@@ -360,7 +395,7 @@ const MembersTab = ({ members, loadData }) => {
                             </div>
                           </div>
                           <DialogFooter>
-                            <Button onClick={addPayment} disabled={isSubmitting} className="bg-black text-white">{isSubmitting ? 'Registrando...' : 'Registrar Pago'}</Button>
+                            <Button onClick={addPayment} disabled={isSubmitting} className="bg-black text-white neu-btn-primary">{isSubmitting ? 'Registrando...' : 'Registrar Pago'}</Button>
                           </DialogFooter>
                         </DialogContent>
                       </Dialog>
@@ -393,6 +428,34 @@ const MembersTab = ({ members, loadData }) => {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Miembro — {editMember?.name}</DialogTitle>
+            <DialogDescription>Actualiza los datos del miembro.</DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+            <div>
+              <Label htmlFor="edit-name">Nombre</Label>
+              <Input id="edit-name" value={editForm.name} onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))} />
+            </div>
+            <div>
+              <Label htmlFor="edit-whatsapp">WhatsApp</Label>
+              <Input id="edit-whatsapp" value={editForm.whatsapp} onChange={(e) => setEditForm(prev => ({ ...prev, whatsapp: e.target.value }))} />
+            </div>
+            <div>
+              <Label htmlFor="edit-birthDate">Fecha de Nacimiento</Label>
+              <Input id="edit-birthDate" type="date" value={editForm.birthDate} onChange={(e) => setEditForm(prev => ({ ...prev, birthDate: e.target.value }))} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={saveEdit} disabled={isSubmitting} className="bg-black text-white neu-btn-primary">
+              {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

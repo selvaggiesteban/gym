@@ -111,7 +111,7 @@ export class RoutinesService {
   private async assertOwner(routineId: string, trainerId: string) {
     const r = await this.prisma.client.routine.findUnique({ where: { id: routineId } });
     if (!r) throw new NotFoundException('Rutina no encontrada');
-    if (r.trainerId !== trainerId) throw new ForbiddenException('No sos dueÃ±o de esta rutina');
+    if (r.trainerId !== trainerId) throw new ForbiddenException('No sos dueño de esta rutina');
     return r;
   }
 }

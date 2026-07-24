@@ -102,7 +102,7 @@ const ScheduleTab = () => {
       <div className="flex gap-2 flex-wrap">
         <Dialog open={isCreateModalOpen} onOpenChange={setCreateModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-black text-white hover:bg-gray-800 shadow-[2px_2px_0px_0px_#000000]">
+            <Button className="bg-black text-white neu-btn-primary">
               <Plus className="w-4 h-4 mr-2" />Agregar Nueva Clase
             </Button>
           </DialogTrigger>
@@ -115,7 +115,7 @@ const ScheduleTab = () => {
               <div><Label htmlFor="instructor">Profesor</Label><Input id="instructor" value={newClass.instructor} onChange={(e) => handleInputChange(e, setNewClass)} placeholder="Nombre del profesor" /></div>
               <div className="md:col-span-2"><Label htmlFor="maxCapacity">Cupos Máximos</Label><Input id="maxCapacity" type="number" value={newClass.maxCapacity} onChange={(e) => handleInputChange(e, setNewClass)} placeholder="Ej: 15" /></div>
             </div>
-            <DialogFooter><Button onClick={addClass} disabled={isSubmitting} className="bg-black text-white">{isSubmitting ? 'Agregando...' : 'Agregar Clase'}</Button></DialogFooter>
+            <DialogFooter><Button onClick={addClass} disabled={isSubmitting} className="bg-black text-white neu-btn-primary">{isSubmitting ? 'Agregando...' : 'Agregar Clase'}</Button></DialogFooter>
           </DialogContent>
         </Dialog>
         <AlertDialog>
@@ -135,7 +135,7 @@ const ScheduleTab = () => {
         </AlertDialog>
       </div>
 
-      <Card className="border-2 border-black shadow-[4px_4px_0px_0px_#000000]">
+      <Card className="neu-card">
         <CardHeader><CardTitle>Calendario Semanal</CardTitle></CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
@@ -199,7 +199,7 @@ const ScheduleTab = () => {
               <div><Label htmlFor="instructor">Profesor</Label><Input id="instructor" value={editingClass.instructor} onChange={(e) => handleInputChange(e, setEditingClass)} /></div>
               <div className="md:col-span-2"><Label htmlFor="maxCapacity">Cupos Máximos</Label><Input id="maxCapacity" type="number" value={editingClass.maxCapacity} onChange={(e) => handleInputChange(e, setEditingClass)} /></div>
             </div>
-            <DialogFooter><Button onClick={updateClass} disabled={isSubmitting} className="bg-black text-white">{isSubmitting ? 'Guardando...' : 'Guardar Cambios'}</Button></DialogFooter>
+            <DialogFooter><Button onClick={updateClass} disabled={isSubmitting} className="bg-black text-white neu-btn-primary">{isSubmitting ? 'Guardando...' : 'Guardar Cambios'}</Button></DialogFooter>
           </DialogContent>
         </Dialog>
       )}
