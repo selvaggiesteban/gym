@@ -7,5 +7,7 @@ allowBuilds:
   core-js: true
   esbuild: true
   prisma: true
+  sharp: true
+  workerd: true
 minimumReleaseAgeExclude:
   - argon2@0.45.0
