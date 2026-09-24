@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import * as argon2 from 'argon2';
+import { hashPassword } from '../auth/password.utils';
 
 export type CreateMemberInput = {
   email: string;
@@ -29,7 +29,7 @@ export class MembersService {
   }
 
   async create(input: CreateMemberInput) {
-    const passwordHash = await argon2.hash(input.password, { type: argon2.argon2id });
+    const passwordHash = await hashPassword(input.password);
     return this.prisma.client.profile.create({
       data: {
         email: input.email,

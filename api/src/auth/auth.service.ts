@@ -5,11 +5,11 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { hashPassword, verifyPassword } from './password.utils';
+import { signAccessToken, signRefreshToken, verifyToken } from './jwt.utils';
 import { SignInDto, SignUpDto, UpdatePasswordDto, ResetPasswordRequestDto } from './dto';
 
 const DEFAULT_MEMBER_STATUS = 'expired';
@@ -18,7 +18,6 @@ const DEFAULT_MEMBER_STATUS = 'expired';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService,
     private config: ConfigService,
     private mail: MailService,
   ) {}
@@ -27,7 +26,7 @@ export class AuthService {
     const exists = await this.prisma.client.profile.findUnique({ where: { email: dto.email } });
     if (exists) throw new ConflictException('Email ya registrado');
 
-    const passwordHash = await argon2.hash(dto.password, { type: argon2.argon2id });
+    const passwordHash = await hashPassword(dto.password);
     const profile = await this.prisma.client.profile.create({
       data: {
         email: dto.email,
@@ -52,7 +51,7 @@ export class AuthService {
   async signIn(dto: SignInDto) {
     const profile = await this.prisma.client.profile.findUnique({ where: { email: dto.email } });
     if (!profile) throw new UnauthorizedException('Credenciales invalidas');
-    const ok = await argon2.verify(profile.passwordHash, dto.password);
+    const ok = await verifyPassword(dto.password, profile.passwordHash);
     if (!ok) throw new UnauthorizedException('Credenciales invalidas');
     if (!profile.isActive) throw new UnauthorizedException('Cuenta desactivada');
 
@@ -66,9 +65,10 @@ export class AuthService {
   async requestPasswordReset(dto: ResetPasswordRequestDto) {
     const profile = await this.prisma.client.profile.findUnique({ where: { email: dto.email } });
     if (!profile) return { ok: true };
-    const resetToken = await this.jwt.signAsync(
-      { sub: profile.id, email: profile.email },
-      { expiresIn: '15m' as any, secret: this.config.getOrThrow('JWT_REFRESH_SECRET') },
+    const resetToken = await signAccessToken(
+      { sub: profile.id, email: profile.email, role: profile.role },
+      this.config.getOrThrow('JWT_REFRESH_SECRET'),
+      '15m',
     );
     const frontendUrl = this.config.get<string>('CORS_ORIGIN', 'http://localhost:5173');
     await this.mail.sendPasswordReset(profile.email, resetToken, frontendUrl);
@@ -76,25 +76,21 @@ export class AuthService {
   }
 
   async confirmPasswordReset(token: string, newPassword: string) {
-    try {
-      const payload = this.jwt.verify<{ sub: string; email: string }>(token, {
-        secret: this.config.getOrThrow('JWT_REFRESH_SECRET'),
-      });
-      const profile = await this.prisma.client.profile.findUnique({ where: { id: payload.sub } });
-      if (!profile) throw new NotFoundException('Usuario no encontrado');
-      const hash = await argon2.hash(newPassword, { type: argon2.argon2id });
-      await this.prisma.client.profile.update({ where: { id: payload.sub }, data: { passwordHash: hash } });
-      return { ok: true };
-    } catch (e) {
-      if (e instanceof NotFoundException) throw e;
-      throw new BadRequestException('Token invalido o expirado');
-    }
+    const secret = this.config.getOrThrow('JWT_REFRESH_SECRET');
+    const payload = await verifyToken(token, secret);
+    if (!payload) throw new BadRequestException('Token invalido o expirado');
+
+    const profile = await this.prisma.client.profile.findUnique({ where: { id: payload.sub as string } });
+    if (!profile) throw new NotFoundException('Usuario no encontrado');
+    const hash = await hashPassword(newPassword);
+    await this.prisma.client.profile.update({ where: { id: payload.sub as string }, data: { passwordHash: hash } });
+    return { ok: true };
   }
 
   async updatePassword(userId: string, dto: UpdatePasswordDto) {
     const profile = await this.prisma.client.profile.findUnique({ where: { id: userId } });
     if (!profile) throw new NotFoundException('Usuario no encontrado');
-    const hash = await argon2.hash(dto.password, { type: argon2.argon2id });
+    const hash = await hashPassword(dto.password);
     await this.prisma.client.profile.update({ where: { id: userId }, data: { passwordHash: hash } });
     return { ok: true };
   }
@@ -102,7 +98,7 @@ export class AuthService {
   private async generateMemberCode(): Promise<string> {
     let attempts = 0;
     while (attempts < 20) {
-      const codeNum = Math.floor(Math.random() * 9000) + 1000; // 1000..9999 (4 digitos)
+      const codeNum = Math.floor(Math.random() * 9000) + 1000;
       const dup = await this.prisma.client.member.findUnique({ where: { memberCode: String(codeNum) } });
       if (!dup) return String(codeNum);
       attempts++;
@@ -117,15 +113,12 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string; profile: any }> {
     const accessTtl = this.config.get<string>('JWT_ACCESS_TTL', '15m');
     const refreshTtl = this.config.get<string>('JWT_REFRESH_TTL', '7d');
+    const accessSecret = this.config.getOrThrow('JWT_ACCESS_SECRET');
+    const refreshSecret = this.config.getOrThrow('JWT_REFRESH_SECRET');
 
-    // El secret por defecto viene del JwtModule.registerAsync (JWT_ACCESS_SECRET),
-    // para el refresh usamos signAsync con secret explícito (distinta clave).
     const [accessToken, refreshToken, profile] = await Promise.all([
-      this.jwt.signAsync({ sub, email, role }, { expiresIn: accessTtl as any }),
-      this.jwt.signAsync(
-        { sub, email, role },
-        { secret: this.config.getOrThrow('JWT_REFRESH_SECRET'), expiresIn: refreshTtl as any },
-      ),
+      signAccessToken({ sub, email, role }, accessSecret, accessTtl),
+      signRefreshToken({ sub, email, role }, refreshSecret, refreshTtl),
       this.prisma.client.profile.findUnique({ where: { id: sub }, include: { member: true, trainer: true } }),
     ]);
 

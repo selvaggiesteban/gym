@@ -9,18 +9,10 @@ import { JwtRefreshGuard } from './jwt-refresh.guard';
 const ACCESS_MAX_AGE_MS = 15 * 60 * 1000; // 15 min
 const REFRESH_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 dias
 
-function cookieOptions(config: ConfigService) {
-  return {
-    httpOnly: true,
-    secure: config.get<string>('COOKIE_SECURE') === 'true',
-    sameSite: 'lax' as const,
-    domain: config.get<string>('COOKIE_DOMAIN') || undefined,
-    path: '/',
-  };
-}
-
 function setCookies(config: ConfigService, res: Response, access: string, refresh: string) {
-  const opts = cookieOptions(config);
+  const secure = config.get<string>('COOKIE_SECURE') === 'true';
+  const domain = config.get<string>('COOKIE_DOMAIN') || undefined;
+  const opts = { httpOnly: true, secure, sameSite: 'lax' as const, domain, path: '/' };
   res.cookie('access_token', access, { ...opts, maxAge: ACCESS_MAX_AGE_MS });
   res.cookie('refresh_token', refresh, { ...opts, maxAge: REFRESH_MAX_AGE_MS });
 }
