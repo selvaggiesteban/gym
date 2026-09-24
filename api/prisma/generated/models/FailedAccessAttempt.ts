@@ -192,7 +192,6 @@ export type FailedAccessAttemptOrderByWithRelationInput = {
   attemptTime?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   member?: Prisma.MemberOrderByWithRelationInput
-  _relevance?: Prisma.FailedAccessAttemptOrderByRelevanceInput
 }
 
 export type FailedAccessAttemptWhereUniqueInput = Prisma.AtLeast<{
@@ -294,12 +293,6 @@ export type FailedAccessAttemptOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type FailedAccessAttemptOrderByRelevanceInput = {
-  fields: Prisma.FailedAccessAttemptOrderByRelevanceFieldEnum | Prisma.FailedAccessAttemptOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type FailedAccessAttemptCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   memberId?: Prisma.SortOrder
@@ -387,7 +380,6 @@ export type FailedAccessAttemptCreateOrConnectWithoutMemberInput = {
 
 export type FailedAccessAttemptCreateManyMemberInputEnvelope = {
   data: Prisma.FailedAccessAttemptCreateManyMemberInput | Prisma.FailedAccessAttemptCreateManyMemberInput[]
-  skipDuplicates?: boolean
 }
 
 export type FailedAccessAttemptUpsertWithWhereUniqueWithoutMemberInput = {
@@ -456,7 +448,23 @@ export type FailedAccessAttemptSelect<ExtArgs extends runtime.Types.Extensions.I
   member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
 }, ExtArgs["result"]["failedAccessAttempt"]>
 
+export type FailedAccessAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  memberId?: boolean
+  reason?: boolean
+  attemptTime?: boolean
+  createdAt?: boolean
+  member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
+}, ExtArgs["result"]["failedAccessAttempt"]>
 
+export type FailedAccessAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  memberId?: boolean
+  reason?: boolean
+  attemptTime?: boolean
+  createdAt?: boolean
+  member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
+}, ExtArgs["result"]["failedAccessAttempt"]>
 
 export type FailedAccessAttemptSelectScalar = {
   id?: boolean
@@ -468,6 +476,12 @@ export type FailedAccessAttemptSelectScalar = {
 
 export type FailedAccessAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "reason" | "attemptTime" | "createdAt", ExtArgs["result"]["failedAccessAttempt"]>
 export type FailedAccessAttemptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
+}
+export type FailedAccessAttemptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
+}
+export type FailedAccessAttemptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.FailedAccessAttempt$memberArgs<ExtArgs>
 }
 
@@ -600,6 +614,30 @@ export interface FailedAccessAttemptDelegate<ExtArgs extends runtime.Types.Exten
   createMany<T extends FailedAccessAttemptCreateManyArgs>(args?: Prisma.SelectSubset<T, FailedAccessAttemptCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many FailedAccessAttempts and returns the data saved in the database.
+   * @param {FailedAccessAttemptCreateManyAndReturnArgs} args - Arguments to create many FailedAccessAttempts.
+   * @example
+   * // Create many FailedAccessAttempts
+   * const failedAccessAttempt = await prisma.failedAccessAttempt.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many FailedAccessAttempts and only return the `id`
+   * const failedAccessAttemptWithIdOnly = await prisma.failedAccessAttempt.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends FailedAccessAttemptCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, FailedAccessAttemptCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FailedAccessAttemptPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a FailedAccessAttempt.
    * @param {FailedAccessAttemptDeleteArgs} args - Arguments to delete one FailedAccessAttempt.
    * @example
@@ -662,6 +700,36 @@ export interface FailedAccessAttemptDelegate<ExtArgs extends runtime.Types.Exten
    * 
    */
   updateMany<T extends FailedAccessAttemptUpdateManyArgs>(args: Prisma.SelectSubset<T, FailedAccessAttemptUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more FailedAccessAttempts and returns the data updated in the database.
+   * @param {FailedAccessAttemptUpdateManyAndReturnArgs} args - Arguments to update many FailedAccessAttempts.
+   * @example
+   * // Update many FailedAccessAttempts
+   * const failedAccessAttempt = await prisma.failedAccessAttempt.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more FailedAccessAttempts and only return the `id`
+   * const failedAccessAttemptWithIdOnly = await prisma.failedAccessAttempt.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends FailedAccessAttemptUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, FailedAccessAttemptUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FailedAccessAttemptPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one FailedAccessAttempt.
@@ -1091,7 +1159,28 @@ export type FailedAccessAttemptCreateManyArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many FailedAccessAttempts.
    */
   data: Prisma.FailedAccessAttemptCreateManyInput | Prisma.FailedAccessAttemptCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * FailedAccessAttempt createManyAndReturn
+ */
+export type FailedAccessAttemptCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FailedAccessAttempt
+   */
+  select?: Prisma.FailedAccessAttemptSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the FailedAccessAttempt
+   */
+  omit?: Prisma.FailedAccessAttemptOmit<ExtArgs> | null
+  /**
+   * The data used to create many FailedAccessAttempts.
+   */
+  data: Prisma.FailedAccessAttemptCreateManyInput | Prisma.FailedAccessAttemptCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FailedAccessAttemptIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1136,6 +1225,36 @@ export type FailedAccessAttemptUpdateManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many FailedAccessAttempts to update.
    */
   limit?: number
+}
+
+/**
+ * FailedAccessAttempt updateManyAndReturn
+ */
+export type FailedAccessAttemptUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FailedAccessAttempt
+   */
+  select?: Prisma.FailedAccessAttemptSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the FailedAccessAttempt
+   */
+  omit?: Prisma.FailedAccessAttemptOmit<ExtArgs> | null
+  /**
+   * The data used to update FailedAccessAttempts.
+   */
+  data: Prisma.XOR<Prisma.FailedAccessAttemptUpdateManyMutationInput, Prisma.FailedAccessAttemptUncheckedUpdateManyInput>
+  /**
+   * Filter which FailedAccessAttempts to update
+   */
+  where?: Prisma.FailedAccessAttemptWhereInput
+  /**
+   * Limit how many FailedAccessAttempts to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FailedAccessAttemptIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

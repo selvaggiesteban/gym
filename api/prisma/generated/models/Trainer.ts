@@ -205,7 +205,6 @@ export type TrainerOrderByWithRelationInput = {
   profile?: Prisma.ProfileOrderByWithRelationInput
   routines?: Prisma.RoutineOrderByRelationAggregateInput
   assignments?: Prisma.RoutineAssignmentOrderByRelationAggregateInput
-  _relevance?: Prisma.TrainerOrderByRelevanceInput
 }
 
 export type TrainerWhereUniqueInput = Prisma.AtLeast<{
@@ -320,12 +319,6 @@ export type TrainerUncheckedUpdateManyInput = {
 export type TrainerNullableScalarRelationFilter = {
   is?: Prisma.TrainerWhereInput | null
   isNot?: Prisma.TrainerWhereInput | null
-}
-
-export type TrainerOrderByRelevanceInput = {
-  fields: Prisma.TrainerOrderByRelevanceFieldEnum | Prisma.TrainerOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type TrainerCountOrderByAggregateInput = {
@@ -641,7 +634,25 @@ export type TrainerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   _count?: boolean | Prisma.TrainerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trainer"]>
 
+export type TrainerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  profileId?: boolean
+  specialty?: boolean
+  bio?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["trainer"]>
 
+export type TrainerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  profileId?: boolean
+  specialty?: boolean
+  bio?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["trainer"]>
 
 export type TrainerSelectScalar = {
   id?: boolean
@@ -658,6 +669,12 @@ export type TrainerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   routines?: boolean | Prisma.Trainer$routinesArgs<ExtArgs>
   assignments?: boolean | Prisma.Trainer$assignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TrainerCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type TrainerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
+}
+export type TrainerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  profile?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
 }
 
 export type $TrainerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -792,6 +809,30 @@ export interface TrainerDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends TrainerCreateManyArgs>(args?: Prisma.SelectSubset<T, TrainerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Trainers and returns the data saved in the database.
+   * @param {TrainerCreateManyAndReturnArgs} args - Arguments to create many Trainers.
+   * @example
+   * // Create many Trainers
+   * const trainer = await prisma.trainer.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Trainers and only return the `id`
+   * const trainerWithIdOnly = await prisma.trainer.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends TrainerCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, TrainerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrainerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Trainer.
    * @param {TrainerDeleteArgs} args - Arguments to delete one Trainer.
    * @example
@@ -854,6 +895,36 @@ export interface TrainerDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends TrainerUpdateManyArgs>(args: Prisma.SelectSubset<T, TrainerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Trainers and returns the data updated in the database.
+   * @param {TrainerUpdateManyAndReturnArgs} args - Arguments to update many Trainers.
+   * @example
+   * // Update many Trainers
+   * const trainer = await prisma.trainer.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Trainers and only return the `id`
+   * const trainerWithIdOnly = await prisma.trainer.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends TrainerUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, TrainerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrainerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Trainer.
@@ -1286,7 +1357,28 @@ export type TrainerCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many Trainers.
    */
   data: Prisma.TrainerCreateManyInput | Prisma.TrainerCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * Trainer createManyAndReturn
+ */
+export type TrainerCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Trainer
+   */
+  select?: Prisma.TrainerSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Trainer
+   */
+  omit?: Prisma.TrainerOmit<ExtArgs> | null
+  /**
+   * The data used to create many Trainers.
+   */
+  data: Prisma.TrainerCreateManyInput | Prisma.TrainerCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TrainerIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1331,6 +1423,36 @@ export type TrainerUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Trainers to update.
    */
   limit?: number
+}
+
+/**
+ * Trainer updateManyAndReturn
+ */
+export type TrainerUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Trainer
+   */
+  select?: Prisma.TrainerSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Trainer
+   */
+  omit?: Prisma.TrainerOmit<ExtArgs> | null
+  /**
+   * The data used to update Trainers.
+   */
+  data: Prisma.XOR<Prisma.TrainerUpdateManyMutationInput, Prisma.TrainerUncheckedUpdateManyInput>
+  /**
+   * Filter which Trainers to update
+   */
+  where?: Prisma.TrainerWhereInput
+  /**
+   * Limit how many Trainers to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TrainerIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

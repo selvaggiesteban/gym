@@ -279,7 +279,6 @@ export type RoutineExerciseOrderByWithRelationInput = {
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   routine?: Prisma.RoutineOrderByWithRelationInput
-  _relevance?: Prisma.RoutineExerciseOrderByRelevanceInput
 }
 
 export type RoutineExerciseWhereUniqueInput = Prisma.AtLeast<{
@@ -433,12 +432,6 @@ export type RoutineExerciseOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RoutineExerciseOrderByRelevanceInput = {
-  fields: Prisma.RoutineExerciseOrderByRelevanceFieldEnum | Prisma.RoutineExerciseOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type RoutineExerciseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   routineId?: Prisma.SortOrder
@@ -571,7 +564,6 @@ export type RoutineExerciseCreateOrConnectWithoutRoutineInput = {
 
 export type RoutineExerciseCreateManyRoutineInputEnvelope = {
   data: Prisma.RoutineExerciseCreateManyRoutineInput | Prisma.RoutineExerciseCreateManyRoutineInput[]
-  skipDuplicates?: boolean
 }
 
 export type RoutineExerciseUpsertWithWhereUniqueWithoutRoutineInput = {
@@ -670,7 +662,33 @@ export type RoutineExerciseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["routineExercise"]>
 
+export type RoutineExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  routineId?: boolean
+  exerciseId?: boolean
+  exerciseName?: boolean
+  sets?: boolean
+  reps?: boolean
+  restSeconds?: boolean
+  notes?: boolean
+  order?: boolean
+  createdAt?: boolean
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["routineExercise"]>
 
+export type RoutineExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  routineId?: boolean
+  exerciseId?: boolean
+  exerciseName?: boolean
+  sets?: boolean
+  reps?: boolean
+  restSeconds?: boolean
+  notes?: boolean
+  order?: boolean
+  createdAt?: boolean
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["routineExercise"]>
 
 export type RoutineExerciseSelectScalar = {
   id?: boolean
@@ -687,6 +705,12 @@ export type RoutineExerciseSelectScalar = {
 
 export type RoutineExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "routineId" | "exerciseId" | "exerciseName" | "sets" | "reps" | "restSeconds" | "notes" | "order" | "createdAt", ExtArgs["result"]["routineExercise"]>
 export type RoutineExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}
+export type RoutineExerciseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}
+export type RoutineExerciseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
 }
 
@@ -824,6 +848,30 @@ export interface RoutineExerciseDelegate<ExtArgs extends runtime.Types.Extension
   createMany<T extends RoutineExerciseCreateManyArgs>(args?: Prisma.SelectSubset<T, RoutineExerciseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many RoutineExercises and returns the data saved in the database.
+   * @param {RoutineExerciseCreateManyAndReturnArgs} args - Arguments to create many RoutineExercises.
+   * @example
+   * // Create many RoutineExercises
+   * const routineExercise = await prisma.routineExercise.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many RoutineExercises and only return the `id`
+   * const routineExerciseWithIdOnly = await prisma.routineExercise.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends RoutineExerciseCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, RoutineExerciseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutineExercisePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a RoutineExercise.
    * @param {RoutineExerciseDeleteArgs} args - Arguments to delete one RoutineExercise.
    * @example
@@ -886,6 +934,36 @@ export interface RoutineExerciseDelegate<ExtArgs extends runtime.Types.Extension
    * 
    */
   updateMany<T extends RoutineExerciseUpdateManyArgs>(args: Prisma.SelectSubset<T, RoutineExerciseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more RoutineExercises and returns the data updated in the database.
+   * @param {RoutineExerciseUpdateManyAndReturnArgs} args - Arguments to update many RoutineExercises.
+   * @example
+   * // Update many RoutineExercises
+   * const routineExercise = await prisma.routineExercise.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more RoutineExercises and only return the `id`
+   * const routineExerciseWithIdOnly = await prisma.routineExercise.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends RoutineExerciseUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, RoutineExerciseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutineExercisePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one RoutineExercise.
@@ -1320,7 +1398,28 @@ export type RoutineExerciseCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many RoutineExercises.
    */
   data: Prisma.RoutineExerciseCreateManyInput | Prisma.RoutineExerciseCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * RoutineExercise createManyAndReturn
+ */
+export type RoutineExerciseCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoutineExercise
+   */
+  select?: Prisma.RoutineExerciseSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoutineExercise
+   */
+  omit?: Prisma.RoutineExerciseOmit<ExtArgs> | null
+  /**
+   * The data used to create many RoutineExercises.
+   */
+  data: Prisma.RoutineExerciseCreateManyInput | Prisma.RoutineExerciseCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoutineExerciseIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1365,6 +1464,36 @@ export type RoutineExerciseUpdateManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many RoutineExercises to update.
    */
   limit?: number
+}
+
+/**
+ * RoutineExercise updateManyAndReturn
+ */
+export type RoutineExerciseUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoutineExercise
+   */
+  select?: Prisma.RoutineExerciseSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoutineExercise
+   */
+  omit?: Prisma.RoutineExerciseOmit<ExtArgs> | null
+  /**
+   * The data used to update RoutineExercises.
+   */
+  data: Prisma.XOR<Prisma.RoutineExerciseUpdateManyMutationInput, Prisma.RoutineExerciseUncheckedUpdateManyInput>
+  /**
+   * Filter which RoutineExercises to update
+   */
+  where?: Prisma.RoutineExerciseWhereInput
+  /**
+   * Limit how many RoutineExercises to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoutineExerciseIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

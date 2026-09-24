@@ -1,13 +1,15 @@
-import { PrismaClient } from './generated/client';
-import * as argon2 from 'argon2';
+import path from 'node:path';
+import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '../src/auth/password.utils';
 
-const prisma = new PrismaClient({} as any);
+const dbPath = path.resolve(process.cwd(), 'prisma', 'dev.db');
+const prisma = new PrismaClient({ datasourceUrl: `file:${dbPath}` });
 
 async function main() {
   console.log('Seeding database...');
 
   // Admin user
-  const adminHash = await argon2.hash('admin1234', { type: argon2.argon2id });
+  const adminHash = await hashPassword('admin1234');
   const adminProfile = await prisma.profile.upsert({
     where: { email: 'admin@gym.com' },
     update: {},
@@ -22,7 +24,7 @@ async function main() {
   console.log(`Admin user: ${adminProfile.email} (${adminProfile.id})`);
 
   // Trainer user
-  const trainerHash = await argon2.hash('trainer1234', { type: argon2.argon2id });
+  const trainerHash = await hashPassword('trainer1234');
   const trainerProfile = await prisma.profile.upsert({
     where: { email: 'trainer@gym.com' },
     update: {},
@@ -41,7 +43,7 @@ async function main() {
   console.log(`Trainer user: ${trainerProfile.email} (${trainerProfile.trainer?.id})`);
 
   // Member user
-  const memberHash = await argon2.hash('member1234', { type: argon2.argon2id });
+  const memberHash = await hashPassword('member1234');
   const memberProfile = await prisma.profile.upsert({
     where: { email: 'member@gym.com' },
     update: {},

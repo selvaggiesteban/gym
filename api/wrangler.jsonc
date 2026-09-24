@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gym-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-10",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gym-db",
+      "database_id": "7d941510-2a66-4006-8b54-55732d75ed5b"
+    }
+  ],
+
+  "vars": {
+    "CORS_ORIGIN": "https://gym-web.pages.dev"
+  },
+
+  "limits": {
+    "cpu_ms": 30000
+  },
+
+  "build": {
+    "command": "npx prisma generate && npx nest build"
+  },
+
+  "dev": {
+    "port": 8787
+  }
+}

@@ -190,7 +190,6 @@ export type NoticeOrderByWithRelationInput = {
   message?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _relevance?: Prisma.NoticeOrderByRelevanceInput
 }
 
 export type NoticeWhereUniqueInput = Prisma.AtLeast<{
@@ -282,12 +281,6 @@ export type NoticeUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type NoticeOrderByRelevanceInput = {
-  fields: Prisma.NoticeOrderByRelevanceFieldEnum | Prisma.NoticeOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type NoticeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
@@ -322,7 +315,21 @@ export type NoticeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
 }, ExtArgs["result"]["notice"]>
 
+export type NoticeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  title?: boolean
+  message?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+}, ExtArgs["result"]["notice"]>
 
+export type NoticeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  title?: boolean
+  message?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+}, ExtArgs["result"]["notice"]>
 
 export type NoticeSelectScalar = {
   id?: boolean
@@ -461,6 +468,30 @@ export interface NoticeDelegate<ExtArgs extends runtime.Types.Extensions.Interna
   createMany<T extends NoticeCreateManyArgs>(args?: Prisma.SelectSubset<T, NoticeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Notices and returns the data saved in the database.
+   * @param {NoticeCreateManyAndReturnArgs} args - Arguments to create many Notices.
+   * @example
+   * // Create many Notices
+   * const notice = await prisma.notice.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Notices and only return the `id`
+   * const noticeWithIdOnly = await prisma.notice.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends NoticeCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, NoticeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NoticePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Notice.
    * @param {NoticeDeleteArgs} args - Arguments to delete one Notice.
    * @example
@@ -523,6 +554,36 @@ export interface NoticeDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * 
    */
   updateMany<T extends NoticeUpdateManyArgs>(args: Prisma.SelectSubset<T, NoticeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Notices and returns the data updated in the database.
+   * @param {NoticeUpdateManyAndReturnArgs} args - Arguments to update many Notices.
+   * @example
+   * // Update many Notices
+   * const notice = await prisma.notice.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Notices and only return the `id`
+   * const noticeWithIdOnly = await prisma.notice.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends NoticeUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, NoticeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NoticePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Notice.
@@ -927,7 +988,24 @@ export type NoticeCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Notices.
    */
   data: Prisma.NoticeCreateManyInput | Prisma.NoticeCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * Notice createManyAndReturn
+ */
+export type NoticeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notice
+   */
+  select?: Prisma.NoticeSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notice
+   */
+  omit?: Prisma.NoticeOmit<ExtArgs> | null
+  /**
+   * The data used to create many Notices.
+   */
+  data: Prisma.NoticeCreateManyInput | Prisma.NoticeCreateManyInput[]
 }
 
 /**
@@ -956,6 +1034,32 @@ export type NoticeUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
  * Notice updateMany
  */
 export type NoticeUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * The data used to update Notices.
+   */
+  data: Prisma.XOR<Prisma.NoticeUpdateManyMutationInput, Prisma.NoticeUncheckedUpdateManyInput>
+  /**
+   * Filter which Notices to update
+   */
+  where?: Prisma.NoticeWhereInput
+  /**
+   * Limit how many Notices to update.
+   */
+  limit?: number
+}
+
+/**
+ * Notice updateManyAndReturn
+ */
+export type NoticeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notice
+   */
+  select?: Prisma.NoticeSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notice
+   */
+  omit?: Prisma.NoticeOmit<ExtArgs> | null
   /**
    * The data used to update Notices.
    */

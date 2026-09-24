@@ -449,6 +449,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.ProfileCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.ProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+        }
         delete: {
           args: Prisma.ProfileDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
@@ -464,6 +468,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.ProfileUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>[]
         }
         upsert: {
           args: Prisma.ProfileUpsertArgs<ExtArgs>
@@ -515,6 +523,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.MemberCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.MemberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberPayload>[]
+        }
         delete: {
           args: Prisma.MemberDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberPayload>
@@ -530,6 +542,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.MemberUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MemberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberPayload>[]
         }
         upsert: {
           args: Prisma.MemberUpsertArgs<ExtArgs>
@@ -581,6 +597,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.TrainerCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.TrainerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TrainerPayload>[]
+        }
         delete: {
           args: Prisma.TrainerDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$TrainerPayload>
@@ -596,6 +616,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.TrainerUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TrainerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TrainerPayload>[]
         }
         upsert: {
           args: Prisma.TrainerUpsertArgs<ExtArgs>
@@ -647,6 +671,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.PaymentCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.PaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentPayload>[]
+        }
         delete: {
           args: Prisma.PaymentDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentPayload>
@@ -662,6 +690,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.PaymentUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentPayload>[]
         }
         upsert: {
           args: Prisma.PaymentUpsertArgs<ExtArgs>
@@ -713,6 +745,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.AttendanceCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.AttendanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttendancePayload>[]
+        }
         delete: {
           args: Prisma.AttendanceDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$AttendancePayload>
@@ -728,6 +764,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.AttendanceUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AttendanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AttendancePayload>[]
         }
         upsert: {
           args: Prisma.AttendanceUpsertArgs<ExtArgs>
@@ -779,6 +819,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.FailedAccessAttemptCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.FailedAccessAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailedAccessAttemptPayload>[]
+        }
         delete: {
           args: Prisma.FailedAccessAttemptDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$FailedAccessAttemptPayload>
@@ -794,6 +838,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.FailedAccessAttemptUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FailedAccessAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailedAccessAttemptPayload>[]
         }
         upsert: {
           args: Prisma.FailedAccessAttemptUpsertArgs<ExtArgs>
@@ -845,6 +893,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.ScheduleClassCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.ScheduleClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduleClassPayload>[]
+        }
         delete: {
           args: Prisma.ScheduleClassDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduleClassPayload>
@@ -860,6 +912,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.ScheduleClassUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ScheduleClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduleClassPayload>[]
         }
         upsert: {
           args: Prisma.ScheduleClassUpsertArgs<ExtArgs>
@@ -911,6 +967,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.ClassBookingCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.ClassBookingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassBookingPayload>[]
+        }
         delete: {
           args: Prisma.ClassBookingDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassBookingPayload>
@@ -926,6 +986,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.ClassBookingUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClassBookingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassBookingPayload>[]
         }
         upsert: {
           args: Prisma.ClassBookingUpsertArgs<ExtArgs>
@@ -977,6 +1041,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.NoticeCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.NoticeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>[]
+        }
         delete: {
           args: Prisma.NoticeDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
@@ -992,6 +1060,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.NoticeUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NoticeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>[]
         }
         upsert: {
           args: Prisma.NoticeUpsertArgs<ExtArgs>
@@ -1043,6 +1115,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.RoutineCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.RoutineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutinePayload>[]
+        }
         delete: {
           args: Prisma.RoutineDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutinePayload>
@@ -1058,6 +1134,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.RoutineUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutinePayload>[]
         }
         upsert: {
           args: Prisma.RoutineUpsertArgs<ExtArgs>
@@ -1109,6 +1189,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.RoutineVersionCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.RoutineVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineVersionPayload>[]
+        }
         delete: {
           args: Prisma.RoutineVersionDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineVersionPayload>
@@ -1124,6 +1208,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.RoutineVersionUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutineVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineVersionPayload>[]
         }
         upsert: {
           args: Prisma.RoutineVersionUpsertArgs<ExtArgs>
@@ -1175,6 +1263,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.RoutineExerciseCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.RoutineExerciseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineExercisePayload>[]
+        }
         delete: {
           args: Prisma.RoutineExerciseDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineExercisePayload>
@@ -1190,6 +1282,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.RoutineExerciseUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutineExerciseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineExercisePayload>[]
         }
         upsert: {
           args: Prisma.RoutineExerciseUpsertArgs<ExtArgs>
@@ -1241,6 +1337,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.RoutineAssignmentCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.RoutineAssignmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineAssignmentPayload>[]
+        }
         delete: {
           args: Prisma.RoutineAssignmentDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineAssignmentPayload>
@@ -1256,6 +1356,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.RoutineAssignmentUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutineAssignmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutineAssignmentPayload>[]
         }
         upsert: {
           args: Prisma.RoutineAssignmentUpsertArgs<ExtArgs>
@@ -1307,6 +1411,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
           args: Prisma.WorkoutLogCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
+        createManyAndReturn: {
+          args: Prisma.WorkoutLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkoutLogPayload>[]
+        }
         delete: {
           args: Prisma.WorkoutLogDeleteArgs<ExtArgs>
           result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkoutLogPayload>
@@ -1322,6 +1430,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         updateMany: {
           args: Prisma.WorkoutLogUpdateManyArgs<ExtArgs>
           result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WorkoutLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkoutLogPayload>[]
         }
         upsert: {
           args: Prisma.WorkoutLogUpsertArgs<ExtArgs>
@@ -1371,9 +1483,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -1588,102 +1697,6 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-export const ProfileOrderByRelevanceFieldEnum = {
-  id: 'id',
-  email: 'email',
-  passwordHash: 'passwordHash',
-  name: 'name',
-  whatsapp: 'whatsapp'
-} as const
-
-export type ProfileOrderByRelevanceFieldEnum = (typeof ProfileOrderByRelevanceFieldEnum)[keyof typeof ProfileOrderByRelevanceFieldEnum]
-
-
-export const MemberOrderByRelevanceFieldEnum = {
-  id: 'id',
-  profileId: 'profileId',
-  memberCode: 'memberCode',
-  status: 'status'
-} as const
-
-export type MemberOrderByRelevanceFieldEnum = (typeof MemberOrderByRelevanceFieldEnum)[keyof typeof MemberOrderByRelevanceFieldEnum]
-
-
-export const TrainerOrderByRelevanceFieldEnum = {
-  id: 'id',
-  profileId: 'profileId',
-  specialty: 'specialty',
-  bio: 'bio'
-} as const
-
-export type TrainerOrderByRelevanceFieldEnum = (typeof TrainerOrderByRelevanceFieldEnum)[keyof typeof TrainerOrderByRelevanceFieldEnum]
-
-
-export const PaymentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  plan: 'plan'
-} as const
-
-export type PaymentOrderByRelevanceFieldEnum = (typeof PaymentOrderByRelevanceFieldEnum)[keyof typeof PaymentOrderByRelevanceFieldEnum]
-
-
-export const AttendanceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId'
-} as const
-
-export type AttendanceOrderByRelevanceFieldEnum = (typeof AttendanceOrderByRelevanceFieldEnum)[keyof typeof AttendanceOrderByRelevanceFieldEnum]
-
-
-export const FailedAccessAttemptOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  reason: 'reason'
-} as const
-
-export type FailedAccessAttemptOrderByRelevanceFieldEnum = (typeof FailedAccessAttemptOrderByRelevanceFieldEnum)[keyof typeof FailedAccessAttemptOrderByRelevanceFieldEnum]
-
-
-export const ScheduleClassOrderByRelevanceFieldEnum = {
-  id: 'id',
-  className: 'className',
-  dayOfWeek: 'dayOfWeek',
-  startTime: 'startTime',
-  instructor: 'instructor'
-} as const
-
-export type ScheduleClassOrderByRelevanceFieldEnum = (typeof ScheduleClassOrderByRelevanceFieldEnum)[keyof typeof ScheduleClassOrderByRelevanceFieldEnum]
-
-
-export const ClassBookingOrderByRelevanceFieldEnum = {
-  id: 'id',
-  classId: 'classId',
-  memberId: 'memberId'
-} as const
-
-export type ClassBookingOrderByRelevanceFieldEnum = (typeof ClassBookingOrderByRelevanceFieldEnum)[keyof typeof ClassBookingOrderByRelevanceFieldEnum]
-
-
-export const NoticeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  title: 'title',
-  message: 'message'
-} as const
-
-export type NoticeOrderByRelevanceFieldEnum = (typeof NoticeOrderByRelevanceFieldEnum)[keyof typeof NoticeOrderByRelevanceFieldEnum]
-
-
-export const RoutineOrderByRelevanceFieldEnum = {
-  id: 'id',
-  trainerId: 'trainerId',
-  name: 'name',
-  description: 'description'
-} as const
-
-export type RoutineOrderByRelevanceFieldEnum = (typeof RoutineOrderByRelevanceFieldEnum)[keyof typeof RoutineOrderByRelevanceFieldEnum]
-
-
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -1699,51 +1712,6 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const RoutineVersionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  routineId: 'routineId',
-  changeNote: 'changeNote'
-} as const
-
-export type RoutineVersionOrderByRelevanceFieldEnum = (typeof RoutineVersionOrderByRelevanceFieldEnum)[keyof typeof RoutineVersionOrderByRelevanceFieldEnum]
-
-
-export const RoutineExerciseOrderByRelevanceFieldEnum = {
-  id: 'id',
-  routineId: 'routineId',
-  exerciseId: 'exerciseId',
-  exerciseName: 'exerciseName',
-  reps: 'reps',
-  notes: 'notes'
-} as const
-
-export type RoutineExerciseOrderByRelevanceFieldEnum = (typeof RoutineExerciseOrderByRelevanceFieldEnum)[keyof typeof RoutineExerciseOrderByRelevanceFieldEnum]
-
-
-export const RoutineAssignmentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  trainerId: 'trainerId',
-  routineId: 'routineId',
-  notes: 'notes'
-} as const
-
-export type RoutineAssignmentOrderByRelevanceFieldEnum = (typeof RoutineAssignmentOrderByRelevanceFieldEnum)[keyof typeof RoutineAssignmentOrderByRelevanceFieldEnum]
-
-
-export const WorkoutLogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  assignmentId: 'assignmentId',
-  routineId: 'routineId',
-  exerciseId: 'exerciseId',
-  routineExerciseId: 'routineExerciseId',
-  notes: 'notes'
-} as const
-
-export type WorkoutLogOrderByRelevanceFieldEnum = (typeof WorkoutLogOrderByRelevanceFieldEnum)[keyof typeof WorkoutLogOrderByRelevanceFieldEnum]
 
 
 

@@ -299,7 +299,6 @@ export type WorkoutLogOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   member?: Prisma.MemberOrderByWithRelationInput
   assignment?: Prisma.RoutineAssignmentOrderByWithRelationInput
-  _relevance?: Prisma.WorkoutLogOrderByRelevanceInput
 }
 
 export type WorkoutLogWhereUniqueInput = Prisma.AtLeast<{
@@ -471,12 +470,6 @@ export type WorkoutLogListRelationFilter = {
 
 export type WorkoutLogOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type WorkoutLogOrderByRelevanceInput = {
-  fields: Prisma.WorkoutLogOrderByRelevanceFieldEnum | Prisma.WorkoutLogOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type WorkoutLogCountOrderByAggregateInput = {
@@ -663,7 +656,6 @@ export type WorkoutLogCreateOrConnectWithoutMemberInput = {
 
 export type WorkoutLogCreateManyMemberInputEnvelope = {
   data: Prisma.WorkoutLogCreateManyMemberInput | Prisma.WorkoutLogCreateManyMemberInput[]
-  skipDuplicates?: boolean
 }
 
 export type WorkoutLogUpsertWithWhereUniqueWithoutMemberInput = {
@@ -735,7 +727,6 @@ export type WorkoutLogCreateOrConnectWithoutAssignmentInput = {
 
 export type WorkoutLogCreateManyAssignmentInputEnvelope = {
   data: Prisma.WorkoutLogCreateManyAssignmentInput | Prisma.WorkoutLogCreateManyAssignmentInput[]
-  skipDuplicates?: boolean
 }
 
 export type WorkoutLogUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -885,7 +876,39 @@ export type WorkoutLogSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workoutLog"]>
 
+export type WorkoutLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  memberId?: boolean
+  assignmentId?: boolean
+  routineId?: boolean
+  exerciseId?: boolean
+  routineExerciseId?: boolean
+  completedReps?: boolean
+  weight?: boolean
+  durationSeconds?: boolean
+  notes?: boolean
+  date?: boolean
+  createdAt?: boolean
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+  assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["workoutLog"]>
 
+export type WorkoutLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  memberId?: boolean
+  assignmentId?: boolean
+  routineId?: boolean
+  exerciseId?: boolean
+  routineExerciseId?: boolean
+  completedReps?: boolean
+  weight?: boolean
+  durationSeconds?: boolean
+  notes?: boolean
+  date?: boolean
+  createdAt?: boolean
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+  assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["workoutLog"]>
 
 export type WorkoutLogSelectScalar = {
   id?: boolean
@@ -904,6 +927,14 @@ export type WorkoutLogSelectScalar = {
 
 export type WorkoutLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "assignmentId" | "routineId" | "exerciseId" | "routineExerciseId" | "completedReps" | "weight" | "durationSeconds" | "notes" | "date" | "createdAt", ExtArgs["result"]["workoutLog"]>
 export type WorkoutLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+  assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
+}
+export type WorkoutLogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+  assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
+}
+export type WorkoutLogIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
   assignment?: boolean | Prisma.RoutineAssignmentDefaultArgs<ExtArgs>
 }
@@ -1045,6 +1076,30 @@ export interface WorkoutLogDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends WorkoutLogCreateManyArgs>(args?: Prisma.SelectSubset<T, WorkoutLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many WorkoutLogs and returns the data saved in the database.
+   * @param {WorkoutLogCreateManyAndReturnArgs} args - Arguments to create many WorkoutLogs.
+   * @example
+   * // Create many WorkoutLogs
+   * const workoutLog = await prisma.workoutLog.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many WorkoutLogs and only return the `id`
+   * const workoutLogWithIdOnly = await prisma.workoutLog.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends WorkoutLogCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, WorkoutLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkoutLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a WorkoutLog.
    * @param {WorkoutLogDeleteArgs} args - Arguments to delete one WorkoutLog.
    * @example
@@ -1107,6 +1162,36 @@ export interface WorkoutLogDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends WorkoutLogUpdateManyArgs>(args: Prisma.SelectSubset<T, WorkoutLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more WorkoutLogs and returns the data updated in the database.
+   * @param {WorkoutLogUpdateManyAndReturnArgs} args - Arguments to update many WorkoutLogs.
+   * @example
+   * // Update many WorkoutLogs
+   * const workoutLog = await prisma.workoutLog.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more WorkoutLogs and only return the `id`
+   * const workoutLogWithIdOnly = await prisma.workoutLog.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends WorkoutLogUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, WorkoutLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkoutLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one WorkoutLog.
@@ -1544,7 +1629,28 @@ export type WorkoutLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many WorkoutLogs.
    */
   data: Prisma.WorkoutLogCreateManyInput | Prisma.WorkoutLogCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * WorkoutLog createManyAndReturn
+ */
+export type WorkoutLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkoutLog
+   */
+  select?: Prisma.WorkoutLogSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkoutLog
+   */
+  omit?: Prisma.WorkoutLogOmit<ExtArgs> | null
+  /**
+   * The data used to create many WorkoutLogs.
+   */
+  data: Prisma.WorkoutLogCreateManyInput | Prisma.WorkoutLogCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkoutLogIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1589,6 +1695,36 @@ export type WorkoutLogUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many WorkoutLogs to update.
    */
   limit?: number
+}
+
+/**
+ * WorkoutLog updateManyAndReturn
+ */
+export type WorkoutLogUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkoutLog
+   */
+  select?: Prisma.WorkoutLogSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkoutLog
+   */
+  omit?: Prisma.WorkoutLogOmit<ExtArgs> | null
+  /**
+   * The data used to update WorkoutLogs.
+   */
+  data: Prisma.XOR<Prisma.WorkoutLogUpdateManyMutationInput, Prisma.WorkoutLogUncheckedUpdateManyInput>
+  /**
+   * Filter which WorkoutLogs to update
+   */
+  where?: Prisma.WorkoutLogWhereInput
+  /**
+   * Limit how many WorkoutLogs to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkoutLogIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -231,7 +231,6 @@ export type RoutineVersionOrderByWithRelationInput = {
   changeNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   routine?: Prisma.RoutineOrderByWithRelationInput
-  _relevance?: Prisma.RoutineVersionOrderByRelevanceInput
 }
 
 export type RoutineVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -346,12 +345,6 @@ export type RoutineVersionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RoutineVersionOrderByRelevanceInput = {
-  fields: Prisma.RoutineVersionOrderByRelevanceFieldEnum | Prisma.RoutineVersionOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
-}
-
 export type RoutineVersionRoutineIdVersionCompoundUniqueInput = {
   routineId: string
   version: number
@@ -455,7 +448,6 @@ export type RoutineVersionCreateOrConnectWithoutRoutineInput = {
 
 export type RoutineVersionCreateManyRoutineInputEnvelope = {
   data: Prisma.RoutineVersionCreateManyRoutineInput | Prisma.RoutineVersionCreateManyRoutineInput[]
-  skipDuplicates?: boolean
 }
 
 export type RoutineVersionUpsertWithWhereUniqueWithoutRoutineInput = {
@@ -530,7 +522,25 @@ export type RoutineVersionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["routineVersion"]>
 
+export type RoutineVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  routineId?: boolean
+  version?: boolean
+  exercises?: boolean
+  changeNote?: boolean
+  createdAt?: boolean
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["routineVersion"]>
 
+export type RoutineVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  routineId?: boolean
+  version?: boolean
+  exercises?: boolean
+  changeNote?: boolean
+  createdAt?: boolean
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["routineVersion"]>
 
 export type RoutineVersionSelectScalar = {
   id?: boolean
@@ -543,6 +553,12 @@ export type RoutineVersionSelectScalar = {
 
 export type RoutineVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "routineId" | "version" | "exercises" | "changeNote" | "createdAt", ExtArgs["result"]["routineVersion"]>
 export type RoutineVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}
+export type RoutineVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
+}
+export type RoutineVersionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
 }
 
@@ -676,6 +692,30 @@ export interface RoutineVersionDelegate<ExtArgs extends runtime.Types.Extensions
   createMany<T extends RoutineVersionCreateManyArgs>(args?: Prisma.SelectSubset<T, RoutineVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many RoutineVersions and returns the data saved in the database.
+   * @param {RoutineVersionCreateManyAndReturnArgs} args - Arguments to create many RoutineVersions.
+   * @example
+   * // Create many RoutineVersions
+   * const routineVersion = await prisma.routineVersion.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many RoutineVersions and only return the `id`
+   * const routineVersionWithIdOnly = await prisma.routineVersion.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends RoutineVersionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, RoutineVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutineVersionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a RoutineVersion.
    * @param {RoutineVersionDeleteArgs} args - Arguments to delete one RoutineVersion.
    * @example
@@ -738,6 +778,36 @@ export interface RoutineVersionDelegate<ExtArgs extends runtime.Types.Extensions
    * 
    */
   updateMany<T extends RoutineVersionUpdateManyArgs>(args: Prisma.SelectSubset<T, RoutineVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more RoutineVersions and returns the data updated in the database.
+   * @param {RoutineVersionUpdateManyAndReturnArgs} args - Arguments to update many RoutineVersions.
+   * @example
+   * // Update many RoutineVersions
+   * const routineVersion = await prisma.routineVersion.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more RoutineVersions and only return the `id`
+   * const routineVersionWithIdOnly = await prisma.routineVersion.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends RoutineVersionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, RoutineVersionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutineVersionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one RoutineVersion.
@@ -1168,7 +1238,28 @@ export type RoutineVersionCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many RoutineVersions.
    */
   data: Prisma.RoutineVersionCreateManyInput | Prisma.RoutineVersionCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * RoutineVersion createManyAndReturn
+ */
+export type RoutineVersionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoutineVersion
+   */
+  select?: Prisma.RoutineVersionSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoutineVersion
+   */
+  omit?: Prisma.RoutineVersionOmit<ExtArgs> | null
+  /**
+   * The data used to create many RoutineVersions.
+   */
+  data: Prisma.RoutineVersionCreateManyInput | Prisma.RoutineVersionCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoutineVersionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1213,6 +1304,36 @@ export type RoutineVersionUpdateManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many RoutineVersions to update.
    */
   limit?: number
+}
+
+/**
+ * RoutineVersion updateManyAndReturn
+ */
+export type RoutineVersionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoutineVersion
+   */
+  select?: Prisma.RoutineVersionSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoutineVersion
+   */
+  omit?: Prisma.RoutineVersionOmit<ExtArgs> | null
+  /**
+   * The data used to update RoutineVersions.
+   */
+  data: Prisma.XOR<Prisma.RoutineVersionUpdateManyMutationInput, Prisma.RoutineVersionUncheckedUpdateManyInput>
+  /**
+   * Filter which RoutineVersions to update
+   */
+  where?: Prisma.RoutineVersionWhereInput
+  /**
+   * Limit how many RoutineVersions to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoutineVersionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

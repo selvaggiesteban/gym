@@ -253,7 +253,6 @@ export type ScheduleClassOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   bookings?: Prisma.ClassBookingOrderByRelationAggregateInput
-  _relevance?: Prisma.ScheduleClassOrderByRelevanceInput
 }
 
 export type ScheduleClassWhereUniqueInput = Prisma.AtLeast<{
@@ -380,12 +379,6 @@ export type ScheduleClassUncheckedUpdateManyInput = {
   maxCapacity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ScheduleClassOrderByRelevanceInput = {
-  fields: Prisma.ScheduleClassOrderByRelevanceFieldEnum | Prisma.ScheduleClassOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ScheduleClassCountOrderByAggregateInput = {
@@ -560,7 +553,27 @@ export type ScheduleClassSelect<ExtArgs extends runtime.Types.Extensions.Interna
   _count?: boolean | Prisma.ScheduleClassCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["scheduleClass"]>
 
+export type ScheduleClassSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  className?: boolean
+  dayOfWeek?: boolean
+  startTime?: boolean
+  instructor?: boolean
+  maxCapacity?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+}, ExtArgs["result"]["scheduleClass"]>
 
+export type ScheduleClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  className?: boolean
+  dayOfWeek?: boolean
+  startTime?: boolean
+  instructor?: boolean
+  maxCapacity?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+}, ExtArgs["result"]["scheduleClass"]>
 
 export type ScheduleClassSelectScalar = {
   id?: boolean
@@ -578,6 +591,8 @@ export type ScheduleClassInclude<ExtArgs extends runtime.Types.Extensions.Intern
   bookings?: boolean | Prisma.ScheduleClass$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.ScheduleClassCountOutputTypeDefaultArgs<ExtArgs>
 }
+export type ScheduleClassIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ScheduleClassIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ScheduleClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ScheduleClass"
@@ -711,6 +726,30 @@ export interface ScheduleClassDelegate<ExtArgs extends runtime.Types.Extensions.
   createMany<T extends ScheduleClassCreateManyArgs>(args?: Prisma.SelectSubset<T, ScheduleClassCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many ScheduleClasses and returns the data saved in the database.
+   * @param {ScheduleClassCreateManyAndReturnArgs} args - Arguments to create many ScheduleClasses.
+   * @example
+   * // Create many ScheduleClasses
+   * const scheduleClass = await prisma.scheduleClass.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many ScheduleClasses and only return the `id`
+   * const scheduleClassWithIdOnly = await prisma.scheduleClass.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ScheduleClassCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ScheduleClassCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScheduleClassPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a ScheduleClass.
    * @param {ScheduleClassDeleteArgs} args - Arguments to delete one ScheduleClass.
    * @example
@@ -773,6 +812,36 @@ export interface ScheduleClassDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
    */
   updateMany<T extends ScheduleClassUpdateManyArgs>(args: Prisma.SelectSubset<T, ScheduleClassUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more ScheduleClasses and returns the data updated in the database.
+   * @param {ScheduleClassUpdateManyAndReturnArgs} args - Arguments to update many ScheduleClasses.
+   * @example
+   * // Update many ScheduleClasses
+   * const scheduleClass = await prisma.scheduleClass.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more ScheduleClasses and only return the `id`
+   * const scheduleClassWithIdOnly = await prisma.scheduleClass.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ScheduleClassUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ScheduleClassUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScheduleClassPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ScheduleClass.
@@ -1205,7 +1274,24 @@ export type ScheduleClassCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many ScheduleClasses.
    */
   data: Prisma.ScheduleClassCreateManyInput | Prisma.ScheduleClassCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * ScheduleClass createManyAndReturn
+ */
+export type ScheduleClassCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ScheduleClass
+   */
+  select?: Prisma.ScheduleClassSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ScheduleClass
+   */
+  omit?: Prisma.ScheduleClassOmit<ExtArgs> | null
+  /**
+   * The data used to create many ScheduleClasses.
+   */
+  data: Prisma.ScheduleClassCreateManyInput | Prisma.ScheduleClassCreateManyInput[]
 }
 
 /**
@@ -1238,6 +1324,32 @@ export type ScheduleClassUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
  * ScheduleClass updateMany
  */
 export type ScheduleClassUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * The data used to update ScheduleClasses.
+   */
+  data: Prisma.XOR<Prisma.ScheduleClassUpdateManyMutationInput, Prisma.ScheduleClassUncheckedUpdateManyInput>
+  /**
+   * Filter which ScheduleClasses to update
+   */
+  where?: Prisma.ScheduleClassWhereInput
+  /**
+   * Limit how many ScheduleClasses to update.
+   */
+  limit?: number
+}
+
+/**
+ * ScheduleClass updateManyAndReturn
+ */
+export type ScheduleClassUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ScheduleClass
+   */
+  select?: Prisma.ScheduleClassSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ScheduleClass
+   */
+  omit?: Prisma.ScheduleClassOmit<ExtArgs> | null
   /**
    * The data used to update ScheduleClasses.
    */

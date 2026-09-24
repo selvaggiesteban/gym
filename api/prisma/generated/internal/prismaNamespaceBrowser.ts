@@ -74,9 +74,6 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -291,102 +288,6 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-export const ProfileOrderByRelevanceFieldEnum = {
-  id: 'id',
-  email: 'email',
-  passwordHash: 'passwordHash',
-  name: 'name',
-  whatsapp: 'whatsapp'
-} as const
-
-export type ProfileOrderByRelevanceFieldEnum = (typeof ProfileOrderByRelevanceFieldEnum)[keyof typeof ProfileOrderByRelevanceFieldEnum]
-
-
-export const MemberOrderByRelevanceFieldEnum = {
-  id: 'id',
-  profileId: 'profileId',
-  memberCode: 'memberCode',
-  status: 'status'
-} as const
-
-export type MemberOrderByRelevanceFieldEnum = (typeof MemberOrderByRelevanceFieldEnum)[keyof typeof MemberOrderByRelevanceFieldEnum]
-
-
-export const TrainerOrderByRelevanceFieldEnum = {
-  id: 'id',
-  profileId: 'profileId',
-  specialty: 'specialty',
-  bio: 'bio'
-} as const
-
-export type TrainerOrderByRelevanceFieldEnum = (typeof TrainerOrderByRelevanceFieldEnum)[keyof typeof TrainerOrderByRelevanceFieldEnum]
-
-
-export const PaymentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  plan: 'plan'
-} as const
-
-export type PaymentOrderByRelevanceFieldEnum = (typeof PaymentOrderByRelevanceFieldEnum)[keyof typeof PaymentOrderByRelevanceFieldEnum]
-
-
-export const AttendanceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId'
-} as const
-
-export type AttendanceOrderByRelevanceFieldEnum = (typeof AttendanceOrderByRelevanceFieldEnum)[keyof typeof AttendanceOrderByRelevanceFieldEnum]
-
-
-export const FailedAccessAttemptOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  reason: 'reason'
-} as const
-
-export type FailedAccessAttemptOrderByRelevanceFieldEnum = (typeof FailedAccessAttemptOrderByRelevanceFieldEnum)[keyof typeof FailedAccessAttemptOrderByRelevanceFieldEnum]
-
-
-export const ScheduleClassOrderByRelevanceFieldEnum = {
-  id: 'id',
-  className: 'className',
-  dayOfWeek: 'dayOfWeek',
-  startTime: 'startTime',
-  instructor: 'instructor'
-} as const
-
-export type ScheduleClassOrderByRelevanceFieldEnum = (typeof ScheduleClassOrderByRelevanceFieldEnum)[keyof typeof ScheduleClassOrderByRelevanceFieldEnum]
-
-
-export const ClassBookingOrderByRelevanceFieldEnum = {
-  id: 'id',
-  classId: 'classId',
-  memberId: 'memberId'
-} as const
-
-export type ClassBookingOrderByRelevanceFieldEnum = (typeof ClassBookingOrderByRelevanceFieldEnum)[keyof typeof ClassBookingOrderByRelevanceFieldEnum]
-
-
-export const NoticeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  title: 'title',
-  message: 'message'
-} as const
-
-export type NoticeOrderByRelevanceFieldEnum = (typeof NoticeOrderByRelevanceFieldEnum)[keyof typeof NoticeOrderByRelevanceFieldEnum]
-
-
-export const RoutineOrderByRelevanceFieldEnum = {
-  id: 'id',
-  trainerId: 'trainerId',
-  name: 'name',
-  description: 'description'
-} as const
-
-export type RoutineOrderByRelevanceFieldEnum = (typeof RoutineOrderByRelevanceFieldEnum)[keyof typeof RoutineOrderByRelevanceFieldEnum]
-
-
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -402,49 +303,4 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const RoutineVersionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  routineId: 'routineId',
-  changeNote: 'changeNote'
-} as const
-
-export type RoutineVersionOrderByRelevanceFieldEnum = (typeof RoutineVersionOrderByRelevanceFieldEnum)[keyof typeof RoutineVersionOrderByRelevanceFieldEnum]
-
-
-export const RoutineExerciseOrderByRelevanceFieldEnum = {
-  id: 'id',
-  routineId: 'routineId',
-  exerciseId: 'exerciseId',
-  exerciseName: 'exerciseName',
-  reps: 'reps',
-  notes: 'notes'
-} as const
-
-export type RoutineExerciseOrderByRelevanceFieldEnum = (typeof RoutineExerciseOrderByRelevanceFieldEnum)[keyof typeof RoutineExerciseOrderByRelevanceFieldEnum]
-
-
-export const RoutineAssignmentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  trainerId: 'trainerId',
-  routineId: 'routineId',
-  notes: 'notes'
-} as const
-
-export type RoutineAssignmentOrderByRelevanceFieldEnum = (typeof RoutineAssignmentOrderByRelevanceFieldEnum)[keyof typeof RoutineAssignmentOrderByRelevanceFieldEnum]
-
-
-export const WorkoutLogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  assignmentId: 'assignmentId',
-  routineId: 'routineId',
-  exerciseId: 'exerciseId',
-  routineExerciseId: 'routineExerciseId',
-  notes: 'notes'
-} as const
-
-export type WorkoutLogOrderByRelevanceFieldEnum = (typeof WorkoutLogOrderByRelevanceFieldEnum)[keyof typeof WorkoutLogOrderByRelevanceFieldEnum]
 

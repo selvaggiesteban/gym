@@ -185,7 +185,6 @@ export type ClassBookingOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   scheduleClass?: Prisma.ScheduleClassOrderByWithRelationInput
   member?: Prisma.MemberOrderByWithRelationInput
-  _relevance?: Prisma.ClassBookingOrderByRelevanceInput
 }
 
 export type ClassBookingWhereUniqueInput = Prisma.AtLeast<{
@@ -276,12 +275,6 @@ export type ClassBookingListRelationFilter = {
 
 export type ClassBookingOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type ClassBookingOrderByRelevanceInput = {
-  fields: Prisma.ClassBookingOrderByRelevanceFieldEnum | Prisma.ClassBookingOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ClassBookingClassIdMemberIdCompoundUniqueInput = {
@@ -413,7 +406,6 @@ export type ClassBookingCreateOrConnectWithoutMemberInput = {
 
 export type ClassBookingCreateManyMemberInputEnvelope = {
   data: Prisma.ClassBookingCreateManyMemberInput | Prisma.ClassBookingCreateManyMemberInput[]
-  skipDuplicates?: boolean
 }
 
 export type ClassBookingUpsertWithWhereUniqueWithoutMemberInput = {
@@ -461,7 +453,6 @@ export type ClassBookingCreateOrConnectWithoutScheduleClassInput = {
 
 export type ClassBookingCreateManyScheduleClassInputEnvelope = {
   data: Prisma.ClassBookingCreateManyScheduleClassInput | Prisma.ClassBookingCreateManyScheduleClassInput[]
-  skipDuplicates?: boolean
 }
 
 export type ClassBookingUpsertWithWhereUniqueWithoutScheduleClassInput = {
@@ -539,7 +530,23 @@ export type ClassBookingSelect<ExtArgs extends runtime.Types.Extensions.Internal
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classBooking"]>
 
+export type ClassBookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  classId?: boolean
+  memberId?: boolean
+  createdAt?: boolean
+  scheduleClass?: boolean | Prisma.ScheduleClassDefaultArgs<ExtArgs>
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["classBooking"]>
 
+export type ClassBookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  classId?: boolean
+  memberId?: boolean
+  createdAt?: boolean
+  scheduleClass?: boolean | Prisma.ScheduleClassDefaultArgs<ExtArgs>
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["classBooking"]>
 
 export type ClassBookingSelectScalar = {
   id?: boolean
@@ -550,6 +557,14 @@ export type ClassBookingSelectScalar = {
 
 export type ClassBookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "classId" | "memberId" | "createdAt", ExtArgs["result"]["classBooking"]>
 export type ClassBookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  scheduleClass?: boolean | Prisma.ScheduleClassDefaultArgs<ExtArgs>
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+}
+export type ClassBookingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  scheduleClass?: boolean | Prisma.ScheduleClassDefaultArgs<ExtArgs>
+  member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
+}
+export type ClassBookingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scheduleClass?: boolean | Prisma.ScheduleClassDefaultArgs<ExtArgs>
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
 }
@@ -683,6 +698,30 @@ export interface ClassBookingDelegate<ExtArgs extends runtime.Types.Extensions.I
   createMany<T extends ClassBookingCreateManyArgs>(args?: Prisma.SelectSubset<T, ClassBookingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many ClassBookings and returns the data saved in the database.
+   * @param {ClassBookingCreateManyAndReturnArgs} args - Arguments to create many ClassBookings.
+   * @example
+   * // Create many ClassBookings
+   * const classBooking = await prisma.classBooking.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many ClassBookings and only return the `id`
+   * const classBookingWithIdOnly = await prisma.classBooking.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ClassBookingCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ClassBookingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassBookingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a ClassBooking.
    * @param {ClassBookingDeleteArgs} args - Arguments to delete one ClassBooking.
    * @example
@@ -745,6 +784,36 @@ export interface ClassBookingDelegate<ExtArgs extends runtime.Types.Extensions.I
    * 
    */
   updateMany<T extends ClassBookingUpdateManyArgs>(args: Prisma.SelectSubset<T, ClassBookingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more ClassBookings and returns the data updated in the database.
+   * @param {ClassBookingUpdateManyAndReturnArgs} args - Arguments to update many ClassBookings.
+   * @example
+   * // Update many ClassBookings
+   * const classBooking = await prisma.classBooking.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more ClassBookings and only return the `id`
+   * const classBookingWithIdOnly = await prisma.classBooking.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ClassBookingUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ClassBookingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassBookingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ClassBooking.
@@ -1174,7 +1243,28 @@ export type ClassBookingCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many ClassBookings.
    */
   data: Prisma.ClassBookingCreateManyInput | Prisma.ClassBookingCreateManyInput[]
-  skipDuplicates?: boolean
+}
+
+/**
+ * ClassBooking createManyAndReturn
+ */
+export type ClassBookingCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassBooking
+   */
+  select?: Prisma.ClassBookingSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassBooking
+   */
+  omit?: Prisma.ClassBookingOmit<ExtArgs> | null
+  /**
+   * The data used to create many ClassBookings.
+   */
+  data: Prisma.ClassBookingCreateManyInput | Prisma.ClassBookingCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassBookingIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1219,6 +1309,36 @@ export type ClassBookingUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many ClassBookings to update.
    */
   limit?: number
+}
+
+/**
+ * ClassBooking updateManyAndReturn
+ */
+export type ClassBookingUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassBooking
+   */
+  select?: Prisma.ClassBookingSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassBooking
+   */
+  omit?: Prisma.ClassBookingOmit<ExtArgs> | null
+  /**
+   * The data used to update ClassBookings.
+   */
+  data: Prisma.XOR<Prisma.ClassBookingUpdateManyMutationInput, Prisma.ClassBookingUncheckedUpdateManyInput>
+  /**
+   * Filter which ClassBookings to update
+   */
+  where?: Prisma.ClassBookingWhereInput
+  /**
+   * Limit how many ClassBookings to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassBookingIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
